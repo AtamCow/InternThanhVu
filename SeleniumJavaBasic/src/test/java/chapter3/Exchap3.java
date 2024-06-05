@@ -19,16 +19,16 @@ public class Exchap3 {
     public static final String logEmail = idEmail + "@" + hostEmail;
     public static final String logPassword = "1234qwer";
     public static final String rePid = "12341234";
+
+    public static final WebDriver driverChrome = new ChromeDriver();
+
     // Ticket informations
     public static String departDate = "7";
     public static String departFrom = "Sài Gòn";
     public static String arriveAt = "Đà Nẵng";
     public static String seatType = "Soft seat";
     public static String ticketAmount = "2";
-
     public static String tabName;
-
-    public static final WebDriver driverChrome = new ChromeDriver();
 
     public static void main(String[] args) {
         //driverChrome.manage().window().maximize();
