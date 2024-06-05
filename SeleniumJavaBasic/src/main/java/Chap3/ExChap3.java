@@ -67,11 +67,17 @@ public class ExChap3 {
 
     public static void register (String mail, String pass, String pid) {
         // Nhập thông tin
-        WebElement registerEmail = driverChrome.findElement(By.id("email"));
-        WebElement registerPassword = driverChrome.findElement(By.id("password"));
-        WebElement registerConfirmPassword = driverChrome.findElement(By.id("confirmPassword"));
-        WebElement registerPid = driverChrome.findElement(By.id("pid"));
-        WebElement registerButton = driverChrome.findElement(By.xpath("//form[@id='RegisterForm']//input[@value='Register']"));
+        By registerEmailById = By.id("email");
+        By registerPasswordById = By.id("password");
+        By registerConfirmPassById = By.id("confirmPassword");
+        By registerPidById = By.id("pid");
+        By registerButtonByXpath = By.xpath("//form[@id='RegisterForm']//input[@value='Register']");
+
+        WebElement registerEmail = driverChrome.findElement(registerEmailById);
+        WebElement registerPassword = driverChrome.findElement(registerPasswordById);
+        WebElement registerConfirmPassword = driverChrome.findElement(registerConfirmPassById);
+        WebElement registerPid = driverChrome.findElement(registerPidById);
+        WebElement registerButton = driverChrome.findElement(registerButtonByXpath);
 
         registerEmail.sendKeys(mail);
         registerPassword.sendKeys(pass);
@@ -89,13 +95,21 @@ public class ExChap3 {
         driverChrome.navigate().to("https://www.guerrillamail.com/inbox");
 
         // Chọn id Email
-        driverChrome.findElement(By.id("inbox-id")).click();
-        driverChrome.findElement(By.xpath("//*[@id=\"inbox-id\"]/input")).sendKeys(idmail);
-        driverChrome.findElement(By.xpath("//span[@id='inbox-id']//button[@class='save button small']")).click();
+        By idEmailButtonById = By.id("inbox-id");
+        By idEmailInputByxpath = By.xpath("//*[@id=\"inbox-id\"]/input");
+        By idEmailSaveButtonByXpath = By.xpath("//span[@id='inbox-id']//button[@class='save button small']");
+        By hostEmailOptionByXpath = By.xpath(String.format("//select[@id='gm-host-select']/option[@value='%s']",hostmail));
 
-        // Chọn host Email
-        //driverChrome.findElement(By.xpath("//*[@id=\"gm-host-select\"]")).click();
-        driverChrome.findElement(By.xpath("//select[@id='gm-host-select']/option[@value='"+hostmail+"']")).click();
+        WebElement idEmailButton = driverChrome.findElement(idEmailButtonById);
+        WebElement idEmailInput = driverChrome.findElement(idEmailInputByxpath);
+        WebElement idEmailSaveButton = driverChrome.findElement(idEmailSaveButtonByXpath);
+        WebElement hostEmailOption = driverChrome.findElement(hostEmailOptionByXpath);
+
+        idEmailButton.click();
+        idEmailInput.sendKeys(idmail);
+        idEmailSaveButton.click();
+        hostEmailOption.click();
+        
 
         // Đợi 5s
         try {
