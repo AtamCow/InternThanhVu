@@ -1,4 +1,4 @@
-package Chap3;
+package chapter3;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,60 +13,59 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class ExChap3 {
-    public static final String idEmail = "njgfuhs";
+public class Exchap3 {
+    public static final String idEmail = "gfgfdbfd";
     public static final String hostEmail = "grr.la";
     public static final String logEmail = idEmail + "@" + hostEmail;
     public static final String logPassword = "1234qwer";
     public static final String rePid = "12341234";
+    // Ticket informations
+    public static String departDate = "7";
+    public static String departFrom = "Sài Gòn";
+    public static String arriveAt = "Đà Nẵng";
+    public static String seatType = "Soft seat";
+    public static String ticketAmount = "2";
+
     public static String tabName;
 
     public static final WebDriver driverChrome = new ChromeDriver();
 
     public static void main(String[] args) {
         //driverChrome.manage().window().maximize();
-
         driverChrome.get("http://saferailway.somee.com/");
 
         // Regíter 1 account
         changeTab("Register");
         register(logEmail, logPassword, rePid);
 
-        // Confirm Acc vừa tạo
+        // Confirm account
         confirmAccount(idEmail, hostEmail);
 
-        // Lấy danh sách tab hiện có
+        // Get list tab
         Set<String> windowHandles = driverChrome.getWindowHandles();
         ArrayList<String> tabs = new ArrayList<String>(windowHandles);
 
-        // Chuyển đổi sang tab mới
+        // Change tab
         driverChrome.switchTo().window(tabs.get(1));
 
-        // Login với account mới
+        // Login with new account
         changeTab("Login");
         login(logEmail, logPassword);
 
         // Book tickets
-        // Chọn thông tin vé
-        String departDate = "6/12/2024";
-        String departFrom = "Nha Trang";
-        String arriveAt = "Phan Thiết";
-        String seatType = "Hard seat";
-        String ticketAmount = "2";
-
         changeTab("Book ticket");
         bookTicket(departDate, departFrom, arriveAt, seatType, ticketAmount);
 
         driverChrome.quit();
     }
 
-    public static void  changeTab (String tabname) {
+    public static void changeTab(String tabname) {
         tabName = tabname;
         driverChrome.findElement(By.linkText(tabName)).click();
     }
 
-    public static void register (String mail, String pass, String pid) {
-        // Nhập thông tin
+    public static void register(String mail, String pass, String pid) {
+        // Enter informations
         By registerEmailById = By.id("email");
         By registerPasswordById = By.id("password");
         By registerConfirmPassById = By.id("confirmPassword");
@@ -84,56 +83,52 @@ public class ExChap3 {
         registerConfirmPassword.sendKeys(pass);
         registerPid.sendKeys(pid);
 
-        JavascriptExecutor js = (JavascriptExecutor) driverChrome;
-        js.executeScript("arguments[0].scrollIntoView(true);", registerButton);
-
+        scrollView(registerButton);
         registerButton.click();
     }
 
-    public static void confirmAccount (String idmail, String hostmail) {
-        // navigate to guerrillamail
+    public static void confirmAccount(String idmail, String hostmail) {
+        // Navigate to guerrillamail
         driverChrome.navigate().to("https://www.guerrillamail.com/inbox");
 
-        // Chọn id Email
-        By idEmailButtonById = By.id("inbox-id");
-        By idEmailInputByxpath = By.xpath("//*[@id=\"inbox-id\"]/input");
-        By idEmailSaveButtonByXpath = By.xpath("//span[@id='inbox-id']//button[@class='save button small']");
-        By hostEmailOptionByXpath = By.xpath(String.format("//select[@id='gm-host-select']/option[@value='%s']",hostmail));
+        // Create id Email
+        By idEmailButtonByXpath = By.xpath("//span[@id='inbox-id']");
+        WebElement idEmailButton = driverChrome.findElement(idEmailButtonByXpath);
+        idEmailButton.click();
 
-        WebElement idEmailButton = driverChrome.findElement(idEmailButtonById);
-        WebElement idEmailInput = driverChrome.findElement(idEmailInputByxpath);
+        By idEmailInputByXpath = By.xpath("//span[@id='inbox-id']//input");
+        By idEmailSaveButtonByXpath = By.xpath("//span[@id='inbox-id']//button[@class='save button small']");
+        By hostEmailOptionByXpath = By.xpath(String.format("//select[@id='gm-host-select']/option[@value='%s']", hostmail));
+
+        WebElement idEmailInput = driverChrome.findElement(idEmailInputByXpath);
         WebElement idEmailSaveButton = driverChrome.findElement(idEmailSaveButtonByXpath);
         WebElement hostEmailOption = driverChrome.findElement(hostEmailOptionByXpath);
 
-        idEmailButton.click();
         idEmailInput.sendKeys(idmail);
         idEmailSaveButton.click();
         hostEmailOption.click();
-        
 
-        // Đợi 5s
+        // Wait
         try {
-            // Chờ trong 5 giây
             Thread.sleep(12000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Chọn email đầu tiên trong tbody
-        WebElement firstRow = driverChrome.findElement(By.xpath("//*[@id=\"email_list\"]//tr[1]"));
+        // Select 1st email in tbody
+        WebElement firstRow = driverChrome.findElement(By.xpath("//*[@id='email_list']//tr[1]"));
 
         firstRow.findElement(By.xpath("//*[@id=\"email_list\"]//tr[1]//td[@class='td2']")).click();
 
-        // Ấn vào link trong confirm mail
-        // Đợi cho đến khi có link xuất hiện
+        // Wait for confirm link
         WebDriverWait wait = new WebDriverWait(driverChrome, Duration.ofSeconds(5));
         WebElement linkConfirm = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='display_email']//div[@class='email_body']//a")));
 
         driverChrome.findElement(By.xpath("//div[@id='display_email']//div[@class='email_body']//a")).click();
     }
 
-    public static void login (String email, String password) {
-        // Nhập thông tin
+    public static void login(String email, String password) {
+        // Enter informations
         WebElement loginEmail = driverChrome.findElement(By.id("username"));
         WebElement loginPassword = driverChrome.findElement(By.id("password"));
         WebElement loginButton = driverChrome.findElement(By.xpath("//div[@id='content']//input[@value='login']"));
@@ -144,27 +139,36 @@ public class ExChap3 {
     }
 
     public static void bookTicket(String departdate, String departfrom, String arriverat, String seattype, String ticketamount) {
-        // Đặt vé
-        driverChrome.findElement(By.xpath("//select[@name='Date']//option[text()='" +departdate+ "']")).click();
-        driverChrome.findElement(By.xpath("//select[@name='DepartStation']//option[text()='" +departfrom+ "']")).click();
+        // Book ticket
+        By dateSelect = By.xpath(String.format("//select[@name='Date']//option[@value='%s']", departdate));
+        By ticketDepartStationSelect = By.xpath(String.format("//select[@name='DepartStation']//option[text()='%s']", departfrom));
 
-        // Đợi 2s
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        driverChrome.findElement(By.xpath("//select[@name='ArriveStation']//option[text()='" +arriverat+ "']")).click();
-        driverChrome.findElement(By.xpath("//select[@name='SeatType']//option[text()='" +seattype+ "']")).click();
-        driverChrome.findElement(By.xpath("//select[@name='TicketAmount']//option[text()='" +ticketamount+ "']")).click();
+        By ticketArriveStationSelect = By.xpath(String.format("//select[@name='ArriveStation']//option[text()='%s']", arriverat));
+        By ticketAmountSelect = By.xpath(String.format("//select[@name='TicketAmount']//option[text()='%s']", ticketamount));
+        By bookTicketInput = By.xpath("//div[@id='content']//form//input[@value='Book ticket']");
 
-        WebElement bookTicketButton = driverChrome.findElement(By.xpath("//div[@id='content']//form//input[@value='Book ticket']"));
+        driverChrome.findElement(dateSelect).click();
+        driverChrome.findElement(ticketDepartStationSelect).click();
+        driverChrome.findElement(ticketArriveStationSelect).click();
 
-        JavascriptExecutor js = (JavascriptExecutor) driverChrome;
-        js.executeScript("arguments[0].scrollIntoView(true);", bookTicketButton);
 
+        WebElement amountTicketOption = driverChrome.findElement(ticketAmountSelect);
+        scrollView(amountTicketOption);
+        amountTicketOption.click();
+
+        WebElement bookTicketButton = driverChrome.findElement(bookTicketInput);
+        scrollView(bookTicketButton);
         bookTicketButton.click();
+    }
 
+    public static void scrollView(Object element) {
+        JavascriptExecutor js = (JavascriptExecutor) driverChrome;
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 }

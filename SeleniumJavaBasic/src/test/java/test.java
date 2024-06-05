@@ -43,12 +43,12 @@ public class test {
         //driverChrome.quit();
     }
 
-    public static void  changeTab (String tabname) {
+    public static void changeTab(String tabname) {
         tabName = tabname;
         driverChrome.findElement(By.linkText(tabName)).click();
     }
 
-    public static void login (String email, String password) {
+    public static void login(String email, String password) {
         // Nhập thông tin
         WebElement loginEmail = driverChrome.findElement(By.id("username"));
         WebElement loginPassword = driverChrome.findElement(By.id("password"));
@@ -61,8 +61,8 @@ public class test {
 
     public static void bookTicket(String departdate, String departfrom, String arriveat, String seattype, String ticketamount) {
         // Đặt vé
-        driverChrome.findElement(By.xpath("//select[@name='Date']//option[text()='" +departdate+ "']")).click();
-        driverChrome.findElement(By.xpath("//select[@name='DepartStation']//option[text()='" +departfrom+ "']")).click();
+        driverChrome.findElement(By.xpath("//select[@name='Date']//option[text()='" + departdate + "']")).click();
+        driverChrome.findElement(By.xpath("//select[@name='DepartStation']//option[text()='" + departfrom + "']")).click();
 
         // Đợi 2s
         try {
@@ -71,9 +71,9 @@ public class test {
             e.printStackTrace();
         }
 
-        driverChrome.findElement(By.xpath("//select[@name='ArriveStation']//option[text()='" +arriveat+ "']")).click();
-        driverChrome.findElement(By.xpath("//select[@name='SeatType']//option[text()='" +seattype+ "']")).click();
-        driverChrome.findElement(By.xpath("//select[@name='TicketAmount']//option[text()='" +ticketamount+ "']")).click();
+        driverChrome.findElement(By.xpath("//select[@name='ArriveStation']//option[text()='" + arriveat + "']")).click();
+        driverChrome.findElement(By.xpath("//select[@name='SeatType']//option[text()='" + seattype + "']")).click();
+        driverChrome.findElement(By.xpath("//select[@name='TicketAmount']//option[text()='" + ticketamount + "']")).click();
 
         WebElement bookTicketButton = driverChrome.findElement(By.xpath("//div[@id='content']//form//input[@value='Book ticket']"));
 
@@ -84,9 +84,8 @@ public class test {
 
     }
 
-    public static void bookTicketByTimeTable(String departdate, String departfrom, String arriveat, String seattype, String ticketamount){
-        driverChrome.findElement(By.xpath("//tbody//tr[td[2][text()='"+ departfrom +"'] and td[3][text()='"+ arriveat +"']]//a")).click();
-
+    public static void bookTicketByTimeTable(String departdate, String departfrom, String arriveat, String seattype, String ticketamount) {
+        driverChrome.findElement(By.xpath("//tbody//tr[td[2][text()='" + departfrom + "'] and td[3][text()='" + arriveat + "']]//a")).click();
 
 
     }
