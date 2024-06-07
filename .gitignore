@@ -1,6 +1,7 @@
 # Bỏ qua tất cả các file và thư mục
 .idea/
 target/
+
 # Không bỏ qua file .gitignore
 !.gitignore
 

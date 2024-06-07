@@ -1,5 +1,10 @@
 package chapter3;
 
+import base.BaseSetup;
+import chapter8.ConfigTest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,54 +12,73 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Set;
 
 
-public class Exchap3 {
-    public static final String idEmail = "gfgfdbfd";
-    public static final String hostEmail = "grr.la";
-    public static final String logEmail = idEmail + "@" + hostEmail;
-    public static final String logPassword = "1234qwer";
-    public static final String rePid = "12341234";
+public class Exchap3 extends BaseSetup {
+    private static final ConfigTest cf = new ConfigTest();
 
-    public static final WebDriver driverChrome = new ChromeDriver();
+    private LoginPage loginPage;
+    private HomePage homePage;
+    private RegisterPage registerPage;
+    private TimetablePage  timetablePage;
+    private TicketPricePage ticketPricePage;
+    private BookTicketPage bookTicketPage;
+    private BookTicketSuccessfulPage bookTicketSuccessfulPage;
+    private PageBase pageBase;
+    private GuerrillamailPage guerrillamailPage;
 
-    // Ticket informations
-    public static String departDate = "7";
-    public static String departFrom = "Sài Gòn";
-    public static String arriveAt = "Đà Nẵng";
-    public static String seatType = "Soft seat";
-    public static String ticketAmount = "2";
-    public static String tabName;
+    @Before
+    public void setUp() {
+        super.setup();
+        loginPage = new LoginPage(getDriver());
+        homePage = new HomePage(getDriver());
+        registerPage = new RegisterPage(getDriver());
+        timetablePage = new TimetablePage(getDriver());
+        ticketPricePage = new TicketPricePage(getDriver());
+        bookTicketPage = new BookTicketPage(getDriver());
+        bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
+        guerrillamailPage = new GuerrillamailPage(getDriver());
+        pageBase = new PageBase(getDriver());
+    }
 
-    public static void main(String[] args) {
-        //driverChrome.manage().window().maximize();
-        driverChrome.get("http://saferailway.somee.com/");
+    @Test
+    public void TC1() {
+        getDriver().get("http://saferailway.somee.com/");
 
-        // Regíter 1 account
-        changeTab("Register");
-        register(logEmail, logPassword, rePid);
+        // Login
+        pageBase.changeTab("Register");
+        registerPage.register(cf.logEmail, cf.logPassword, cf.rePid);
+
+        getDriver().navigate().to("https://www.guerrillamail.com/inbox");
 
         // Confirm account
-        confirmAccount(idEmail, hostEmail);
+        confirmAccount(cf.idEmail, cf.hostEmail);
 
-        // Get list tab
-        Set<String> windowHandles = driverChrome.getWindowHandles();
-        ArrayList<String> tabs = new ArrayList<String>(windowHandles);
+        pageBase.changeToTab(1);
 
-        // Change tab
-        driverChrome.switchTo().window(tabs.get(1));
+        pageBase.changeTab("Login");
 
+
+    }
+
+    @After
+    public void tearDown() {
+        super.tearDown();
+    }
+
+    public void main(String[] args) {
         // Login with new account
         changeTab("Login");
-        login(logEmail, logPassword);
+        login(cf.logEmail, cf.logPassword);
 
         // Book tickets
         changeTab("Book ticket");
-        bookTicket(departDate, departFrom, arriveAt, seatType, ticketAmount);
+        bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
 
         driverChrome.quit();
     }
