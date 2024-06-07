@@ -1,0 +1,12 @@
+# Bỏ qua tất cả các file và thư mục
+*
+
+# Không bỏ qua file .gitignore
+!.gitignore
+
+# Không bỏ qua các file .xml
+!*.xml
+!.iml
+
+# Không bỏ qua thư mục source và tất cả nội dung bên trong
+!source/
