@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="chapter8" />
-        <module name="SJB" />
-        <module name="chaper10" />
         <module name="Chap3" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="chaper10" target="21" />
+      <module name="chapter8" target="21" />
+      <module name="SJB" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
