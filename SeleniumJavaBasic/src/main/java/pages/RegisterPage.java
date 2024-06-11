@@ -4,7 +4,8 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import pages.*;
+
+import java.sql.Driver;
 
 public class RegisterPage {
     private WebDriver driver;
@@ -15,8 +16,12 @@ public class RegisterPage {
         this.pageBase = new PageBase(driver);
     }
 
+    private String errorMessageLabelNextto = "//div[@id='content']//label[@for='%s' and @class='validation-error']";
+    private String inputTextfield = "//div[@id='content']//input[@id='%s']";
+    private String titleText = "//div[@id='content']//h1";
+
     By registerForm = By.xpath("//div[@id='content']//form[@id='RegisterForm']");
-    By errorMessage = By.xpath("//div[@id='content']//p[@class='message error']");
+    By errorMessageAbove = By.xpath("//div[@id='content']//p[@class='message error']");
 
     public void register(String mail, String pass, String pid) {
         // Enter informations
@@ -41,8 +46,8 @@ public class RegisterPage {
         registerButton.click();
     }
 
-    public void checkErrorMessage(String expectedMessage) {
-        WebElement errorMessageText = driver.findElement(errorMessage);
+    public void checkErrorMessageAbove(String expectedMessage) {
+        WebElement errorMessageText = driver.findElement(errorMessageAbove);
         String recordMessage = errorMessageText.getText();
         System.out.println(recordMessage);
         Assert.assertEquals(expectedMessage, recordMessage);
@@ -53,5 +58,27 @@ public class RegisterPage {
         int formY = form.getLocation().getY();
 
         Assert.assertTrue(errorMessageY < formY);
+    }
+
+    public void checkErrorMessageNextto(String expectedMessage, String position) {
+        By errorMessageNextto = By.xpath(String.format(errorMessageLabelNextto, position));
+
+        WebElement errorMessageText = driver.findElement(errorMessageNextto);
+        String recordMessage = errorMessageText.getText();
+        System.out.println(recordMessage);
+        Assert.assertEquals(expectedMessage, recordMessage);
+
+        By registerInput = By.xpath(String.format(inputTextfield, position));
+        WebElement input = driver.findElement(registerForm);
+
+        int errorMessageY = errorMessageText.getLocation().getY();
+        int inputY = input.getLocation().getY();
+        Assert.assertEquals(errorMessageY, inputY);
+    }
+
+    public void checkTitle(String expectedMessage) {
+        String message = driver.findElement(By.xpath(titleText)).getText();
+
+        Assert.assertEquals(expectedMessage, message);
     }
 }
