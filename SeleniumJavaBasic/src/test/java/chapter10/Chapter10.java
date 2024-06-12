@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import pages.*;
 
 public class Chapter10 extends BaseSetup {
-    private static final Logger log = LoggerFactory.getLogger(Chapter10.class);
     private ConfigTest cf;
 
     private LoginPage loginPage;
+    private FAQPage faqPage;
     private HomePage homePage;
     private RegisterPage registerPage;
     private TimetablePage timetablePage;
@@ -19,12 +19,17 @@ public class Chapter10 extends BaseSetup {
     private BookTicketPage bookTicketPage;
     private BookTicketSuccessfulPage bookTicketSuccessfulPage;
     private PageBase pageBase;
+    private GuerrillamailPage guerrillamailPage;
+    private ChangePasswordPage changePasswordPage;
+    private ForgotPasswordPage forgotPasswordPage;
+    private MyTicketPage myTicketPage;
 
     @Before
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());
+        faqPage = new FAQPage(getDriver());
         homePage = new HomePage(getDriver());
         registerPage = new RegisterPage(getDriver());
         timetablePage = new TimetablePage(getDriver());
@@ -32,25 +37,29 @@ public class Chapter10 extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
         pageBase = new PageBase(getDriver());
+        guerrillamailPage = new GuerrillamailPage(getDriver());
+        changePasswordPage = new ChangePasswordPage(getDriver());
+        myTicketPage = new MyTicketPage(getDriver());
+        forgotPasswordPage = new ForgotPasswordPage(getDriver());
     }
 
     @Test //User can log into Railway with valid username and password
-    public void TC1() {
+    public void TC01() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
-        homePage.checkWelcomeMessage(cf.wellcomMessage);
+        homePage.checkWelcomeMessage(cf.validLogEmail);
     }
 
     @Test //User cannot login with blank "Username" textbox
-    public void TC2() {
+    public void TC02() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login("", cf.logPassword);
 
         loginPage.checkErrorMessage(cf.messageErrorLoginform);
@@ -58,22 +67,22 @@ public class Chapter10 extends BaseSetup {
     }
 
     @Test //User cannot log into Railway with invalid password
-    public void TC3() {
+    public void TC03() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login(cf.validLogEmail, cf.invalidPassword);
 
         loginPage.checkErrorMessage(cf.messageErrorLoginform);
     }
 
     @Test //System shows message when user enters wrong password many times
-    public void TC4() {
+    public void TC04() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
 
         for (int i = 0; i < 4; i++) {
             loginPage.login(cf.validLogEmail, cf.invalidPassword);
@@ -85,15 +94,15 @@ public class Chapter10 extends BaseSetup {
     }
 
     @Test //User can't login with an account hasn't been activated
-    public void TC5() {
+    public void TC05() {
         cf.navigateRailway();
 
         //Register
-        pageBase.changePage("Register");
+        registerPage.changePage();
         registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
         loginPage.checkLoginYet();
@@ -101,15 +110,15 @@ public class Chapter10 extends BaseSetup {
     }
 
     @Test //User is redirected to Home page after logging out
-    public void TC6() {
+    public void TC06() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
-        pageBase.changePage("FAQ");
-        pageBase.changePage("Log out");
+        faqPage.changePage();
+        pageBase.logOut();
 
         pageBase.waitMiliSec(1000);
         pageBase.checkCurrentPage("Home");
@@ -117,22 +126,22 @@ public class Chapter10 extends BaseSetup {
     }
 
     @Test //User can't create account with an already in-use email
-    public void TC7() {
+    public void TC07() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Register");
+        registerPage.changePage();
         registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
 
         registerPage.checkErrorMessageAbove(cf.messageErrorRegisterWithInvalidEmail);
     }
 
     @Test //User can't create account while password and PID fields are empty
-    public void TC8() {
+    public void TC08() {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Register");
+        registerPage.changePage();
         registerPage.register(cf.validLogEmail, "", "");
 
         registerPage.checkErrorMessageAbove(cf.messageErrorRegister);
@@ -141,7 +150,7 @@ public class Chapter10 extends BaseSetup {
     }
 
     @Test //User create and activate account
-    public void TC9() {
+    public void TC09() {
         cf.navigateRailway();
 
         homePage.register();
@@ -149,14 +158,130 @@ public class Chapter10 extends BaseSetup {
         registerPage.register(cf.reEmail, cf.logPassword, cf.rePid);
         registerPage.checkTitle(cf.messageTitleAfterRegister);
 
+        cf.navigateQuerrilMail();
+        int originNumTabs = pageBase.getTabNumber();
+        guerrillamailPage.confirmAccount(cf.reIdEmail, cf.reHostEmail);
+        guerrillamailPage.confirmEmailWithTd();
+        int newNumTabs = pageBase.getTabNumber();
 
-        registerPage.checkErrorMessageAbove(cf.messageErrorRegister);
-        registerPage.checkErrorMessageNextto(cf.messageInvalidPasswordLenghtRegister, "password");
-        registerPage.checkErrorMessageNextto(cf.messageInvalidPidlenghtRegister, "pid");
+        Assert.assertEquals(newNumTabs, originNumTabs + 1);
+        pageBase.changeToTab(1);
+
+        registerPage.checkConfirmed(cf.messageConfirmedRegister);
     }
 
+    @Test //User create and activate account
+    public void TC10() {
+        cf.navigateRailway();
+        loginPage.changePage();
 
+        forgotPasswordPage.changeToForgotPasswordPage();
+        forgotPasswordPage.sendMail(cf.validLogEmail);
 
+        cf.navigateQuerrilMail();
+        guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
+        guerrillamailPage.resetEmailWithTd();
+
+        pageBase.changeToTab(1);
+
+        changePasswordPage.checkPasswordChangeFormShown();
+        changePasswordPage.enterNewPassword(cf.logPassword, cf.logPassword);
+        changePasswordPage.checkWarningSamePassMessageShown();
+    }
+
+    @Test //Reset password shows error if the new password and confirm password doesn't match
+    public void TC11() {
+        cf.navigateRailway();
+        loginPage.changePage();
+
+        forgotPasswordPage.changeToForgotPasswordPage();
+        forgotPasswordPage.sendMail(cf.validLogEmail);
+
+        cf.navigateQuerrilMail();
+        guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
+        guerrillamailPage.resetEmailWithTd();
+
+        pageBase.changeToTab(1);
+
+        changePasswordPage.checkPasswordChangeFormShown();
+        changePasswordPage.enterNewPassword(cf.logPassword, cf.invalidPassword);
+        changePasswordPage.checkErrorMessageAbove(cf.messageErrorAbove);
+        changePasswordPage.checkErrorMessageNextto(cf.messageErrorNexttoConfirmPass, "confirmPassword");
+    }
+
+    @Test //User can book 1 ticket at a time
+    public void TC12() {
+        cf.navigateRailway();
+        loginPage.changePage();
+
+        loginPage.login(cf.validLogEmail, cf.logPassword);
+
+        bookTicketPage.changePage();
+
+        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+
+        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+    }
+
+    @Test //User can book many tickets at a time
+    public void TC13() {
+        cf.navigateRailway();
+        loginPage.changePage();
+
+        loginPage.login(cf.validLogEmail, cf.logPassword);
+
+        bookTicketPage.changePage();
+        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmounts);
+
+        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmounts  );
+    }
+
+    @Test //User can check price of ticket from Timetable
+    public void TC14() {
+        cf.navigateRailway();
+        loginPage.changePage();
+        loginPage.login(cf.validLogEmail, cf.logPassword);
+
+        timetablePage.changePage();
+
+        timetablePage.checkPrice(cf.departFrom, cf.arriveAt);
+
+        timetablePage.checkPriceSeattypeTable();
+
+    }
+
+    @Test //User can book ticket from Timetable
+    public void TC15() {
+        cf.navigateRailway();
+        loginPage.changePage();
+        loginPage.login(cf.validLogEmail, cf.logPassword);
+
+        timetablePage.changePage();
+
+        timetablePage.bookTicketInTimetable(cf.departFrom, cf.arriveAt);
+
+        bookTicketPage.checkInfoFromTimetable(cf.departFrom, cf.arriveAt);
+
+        bookTicketPage.selectDepartDate(cf.departDate);
+        bookTicketPage.selectSeatType(cf.seatType);
+        bookTicketPage.selectAmount(cf.ticketAmount);
+        bookTicketPage.clickBookticketButton();
+
+        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+    }
+
+    @Test //User can cancel a ticket
+    public void TC16() {
+        cf.navigateRailway();
+        loginPage.changePage();
+        loginPage.login(cf.validLogEmail, cf.logPassword);
+
+        bookTicketPage.changePage();
+        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+
+        myTicketPage.changePage();
+        myTicketPage.cancelTicket(cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount);
+    }
 
     @After
     public void tearDown() {

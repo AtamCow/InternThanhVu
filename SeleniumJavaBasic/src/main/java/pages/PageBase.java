@@ -16,22 +16,22 @@ public class PageBase {
         this.driver = driver;
     }
 
-    private String tabNameXpath = "//div[@id='menu']//span[text()='%s']";
-
     public void scrollView(Object element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
-    public void changePage(String tabname) {
-        By tabNameChange = By.xpath(String.format(tabNameXpath, tabname));
-        driver.findElement(tabNameChange).click();
+    public int getTabNumber() {
+        Set<String> windowHandles = driver.getWindowHandles();
+        int tabNumbers = windowHandles.size();
+
+        return tabNumbers;
     }
 
     public void changeToTab (int tabNum) {
         // Get list tab
-        Set<String> windowHandles = driver.getWindowHandles();
-        ArrayList<String> tabs = new ArrayList<String>(windowHandles);
+        Set<String> originnalWindowHandles = driver.getWindowHandles();
+        ArrayList<String> tabs = new ArrayList<String>(originnalWindowHandles);
 
         // Change tab
         driver.switchTo().window(tabs.get(tabNum));
@@ -70,6 +70,11 @@ public class PageBase {
             }
         }
         Assert.assertFalse(check);
+    }
+
+    public void logOut() {
+        By tabNameChange = By.xpath("//div[@id='menu']//span[text()='Log out']");
+        driver.findElement(tabNameChange).click();
     }
 
 

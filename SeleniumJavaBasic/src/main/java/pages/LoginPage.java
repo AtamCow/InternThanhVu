@@ -18,6 +18,11 @@ public class LoginPage {
         this.pageBase = new PageBase(driver);
     }
 
+    public void changePage() {
+        By tabNameChange = By.xpath("//div[@id='menu']//span[text()='Login']");
+        driver.findElement(tabNameChange).click();
+    }
+
     private By usernameField = By.id("username");
     private By passwordField = By.id("password");
     private By loginButton = By.xpath("//div[@id='content']//input[@value='login']");
@@ -62,5 +67,4 @@ public class LoginPage {
         if (exitsText == 1)
             System.out.println("Could not find message");
     }
-
 }

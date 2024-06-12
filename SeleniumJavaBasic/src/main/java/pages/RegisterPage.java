@@ -16,9 +16,15 @@ public class RegisterPage {
         this.pageBase = new PageBase(driver);
     }
 
+    public void changePage() {
+        By tabNameChange = By.xpath("//div[@id='menu']//span[text()='Register']");
+        driver.findElement(tabNameChange).click();
+    }
+
     private String errorMessageLabelNextto = "//div[@id='content']//label[@for='%s' and @class='validation-error']";
     private String inputTextfield = "//div[@id='content']//input[@id='%s']";
     private String titleText = "//div[@id='content']//h1";
+    private String confirmedMessage = "//div[@id='content']//p";
 
     By registerForm = By.xpath("//div[@id='content']//form[@id='RegisterForm']");
     By errorMessageAbove = By.xpath("//div[@id='content']//p[@class='message error']");
@@ -49,7 +55,6 @@ public class RegisterPage {
     public void checkErrorMessageAbove(String expectedMessage) {
         WebElement errorMessageText = driver.findElement(errorMessageAbove);
         String recordMessage = errorMessageText.getText();
-        System.out.println(recordMessage);
         Assert.assertEquals(expectedMessage, recordMessage);
 
         WebElement form = driver.findElement(registerForm);
@@ -62,18 +67,17 @@ public class RegisterPage {
 
     public void checkErrorMessageNextto(String expectedMessage, String position) {
         By errorMessageNextto = By.xpath(String.format(errorMessageLabelNextto, position));
-
         WebElement errorMessageText = driver.findElement(errorMessageNextto);
         String recordMessage = errorMessageText.getText();
-        System.out.println(recordMessage);
         Assert.assertEquals(expectedMessage, recordMessage);
 
         By registerInput = By.xpath(String.format(inputTextfield, position));
-        WebElement input = driver.findElement(registerForm);
+        WebElement input = driver.findElement(registerInput);
 
         int errorMessageY = errorMessageText.getLocation().getY();
         int inputY = input.getLocation().getY();
-        Assert.assertEquals(errorMessageY, inputY);
+        int check = Math.abs(errorMessageY - inputY);
+        Assert.assertTrue("Error message display out of the field",check < 10);
     }
 
     public void checkTitle(String expectedMessage) {
@@ -81,4 +85,11 @@ public class RegisterPage {
 
         Assert.assertEquals(expectedMessage, message);
     }
+
+    public void checkConfirmed(String expectedMessage) {
+        String message = driver.findElement(By.xpath(confirmedMessage)).getText();
+
+        Assert.assertEquals(expectedMessage, message);
+    }
+
 }

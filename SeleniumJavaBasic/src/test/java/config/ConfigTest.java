@@ -22,13 +22,14 @@ public class ConfigTest {
     public String rePid = "12341234";
 
     // Ticket informations
-    public String departDate = "7";
-    public String departFrom = "Sài Gòn";
-    public String arriveAt = "Đà Nẵng";
+    public String departDate = "25";
+    public String departFrom = "Đà Nẵng";
+    public String arriveAt = "Sài Gòn";
     public String seatType = "Soft seat";
     public String ticketAmount = "1";
+    public String ticketAmounts = "1";
 
-    public String loginSuccessfullMessage = "Ticket booked successfully!";
+    public String bookSuccessfullMessage = "Ticket booked successfully!";
 
     // Home page
     public String wellcomMessage = "Welcome to Safe Railway";
@@ -44,6 +45,11 @@ public class ConfigTest {
     public String messageInvalidPasswordLenghtRegister = "Invalid password length.";
     public String messageInvalidPidlenghtRegister = "Invalid ID length.";
     public String messageTitleAfterRegister = "Thank you for registering your account";
+    public String messageConfirmedRegister = "Registration Confirmed! You can now log in to the site";
+
+    // Change Password
+    public String messageErrorAbove = "Could not reset password. Please correct the errors and try again.";
+    public String messageErrorNexttoConfirmPass = "The password confirmation did not match the new password.";
 
     public void navigateRailway() {
         driver.get("http://saferailway.somee.com/");
