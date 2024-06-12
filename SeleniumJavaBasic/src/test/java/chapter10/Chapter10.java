@@ -124,8 +124,37 @@ public class Chapter10 extends BaseSetup {
         pageBase.changePage("Register");
         registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
 
-        registerPage.checkErrorMessage(cf.messageErrorRegister);
+        registerPage.checkErrorMessageAbove(cf.messageErrorRegisterWithInvalidEmail);
     }
+
+    @Test //User can't create account while password and PID fields are empty
+    public void TC8() {
+        cf.navigateRailway();
+
+        // Login
+        pageBase.changePage("Register");
+        registerPage.register(cf.validLogEmail, "", "");
+
+        registerPage.checkErrorMessageAbove(cf.messageErrorRegister);
+        registerPage.checkErrorMessageNextto(cf.messageInvalidPasswordLenghtRegister, "password");
+        registerPage.checkErrorMessageNextto(cf.messageInvalidPidlenghtRegister, "pid");
+    }
+
+    @Test //User create and activate account
+    public void TC9() {
+        cf.navigateRailway();
+
+        homePage.register();
+        pageBase.checkCurrentPage("Register");
+        registerPage.register(cf.reEmail, cf.logPassword, cf.rePid);
+        registerPage.checkTitle(cf.messageTitleAfterRegister);
+
+
+        registerPage.checkErrorMessageAbove(cf.messageErrorRegister);
+        registerPage.checkErrorMessageNextto(cf.messageInvalidPasswordLenghtRegister, "password");
+        registerPage.checkErrorMessageNextto(cf.messageInvalidPidlenghtRegister, "pid");
+    }
+
 
 
 
