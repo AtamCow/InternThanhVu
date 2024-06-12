@@ -14,14 +14,14 @@ public class HomePage {
 
     private String createAccountLink = "//div[@id='content']//a";
     private String creataAccountText = "create an account";
-    private String messageWelcome = "//div[@id='content']//h1";
+    private String messageWelcome = "//div[@class='account']//strong";
 
-    public void checkWelcomeMessage (String expectedMessage) {
+    public void checkWelcomeMessage (String email) {
         By welcomeMessageText = By.xpath(messageWelcome);
 
         String recordMessage = driver.findElement(welcomeMessageText).getText();
 
-        Assert.assertEquals(expectedMessage, recordMessage);
+        Assert.assertEquals(String.format("Welcome %s", email), recordMessage);
     }
 
     public void register() {

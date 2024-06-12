@@ -3,7 +3,6 @@ package pages;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +25,7 @@ public class BookTicketSuccessfulPage {
 
     public void checkTicketInfo (String expectedMessage, String departstationExpected, String arrivestationExpected, String seattypeExpected, String departdateExpected, String amountExpected) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-        String checkedAmountDate = LocalDate.now().plusDays(Integer.parseInt(departdateExpected)).format(formatter);
+        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(departdateExpected)).format(formatter);
 
         By h1Message = By.xpath(h1MessageXpath);
         By departStation = By.xpath(String.format(tdInformation, tdDepartStation));
@@ -60,9 +59,9 @@ public class BookTicketSuccessfulPage {
             checkValue += 1;
             System.out.println(String.format("Record value: %s, Expected value: %s",seatTypeValue, seattypeExpected));
         }
-        if (!checkedAmountDate.equals(departDateValue)) {
+        if (!checkedDate.equals(departDateValue)) {
             checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",departDateValue, checkedAmountDate));
+            System.out.println(String.format("Record value: %s, Expected value: %s",departDateValue, checkedDate));
         }
         if (!amountExpected.equals(amountValue)) {
             checkValue += 1;

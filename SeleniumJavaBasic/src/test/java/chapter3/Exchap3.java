@@ -31,7 +31,7 @@ public class Exchap3 extends BaseSetup {
     public void TC1() {
         cf.navigateRailway();
 
-        pageBase.changePage("Register");
+        registerPage.changePage();
 
         registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
 
@@ -39,14 +39,15 @@ public class Exchap3 extends BaseSetup {
 
         // Confirm account
         guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
+        guerrillamailPage.confirmEmailWithTd();
 
 
         pageBase.changeToTab(1);
 
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
-        pageBase.changePage("Book ticket");
+        bookTicketPage.changePage();
 
         bookTicketPage.bookTicket(cf.departDate, "Phan Thiết", cf.arriveAt, cf.seatType, cf.ticketAmount);
     }

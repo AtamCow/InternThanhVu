@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.*;
 
 import java.time.Duration;
 
@@ -22,8 +21,8 @@ public class GuerrillamailPage {
     private String idEmailInput = "//span[@id='inbox-id']//input";
     private String idEmailSaveButton = "//span[@id='inbox-id']//button[@class='save button small']";
     private String hostEmailOption = "//select[@id='gm-host-select']/option[@value='%s']";
-    private String firstRowEmail = "//*[@id='email_list']//tr[1]";
-    private String td2Email = "//*[@id=\"email_list\"]//tr[1]//td[@class='td2']";
+    private String tdconfirmEmail = "//tbody[@id='email_list']//tr[td[contains(text(), 'Please confirm your account')]][1]";
+    private String tdResetEmail = "//tbody[@id='email_list']//td[contains(text(), 'Please reset your password')]";
     private String confirmLink = "//div[@id='display_email']//div[@class='email_body']//a";
 
     public void confirmAccount(String idmail, String hostmail) {
@@ -40,16 +39,24 @@ public class GuerrillamailPage {
 
         // Wait
         pageBase.waitMiliSec(12000);
-
-        confirmEmailWith1stEmail();
-
     }
 
-    public void confirmEmailWith1stEmail () {
+    public void confirmEmailWithTd() {
         // Select 1st email in tbody
-        WebElement firstRow = driver.findElement(By.xpath(firstRowEmail));
+        WebElement clickEmail = driver.findElement(By.xpath(tdconfirmEmail));
+        clickEmail.click();
 
-        firstRow.findElement(By.xpath(td2Email)).click();
+        // Wait for confirm link
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement linkConfirm = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(confirmLink)));
+
+        linkConfirm.click();
+    }
+
+    public void resetEmailWithTd() {
+        // Select 1st email in tbody
+        WebElement clickEmail = driver.findElement(By.xpath(tdResetEmail));
+        clickEmail.click();
 
         // Wait for confirm link
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));

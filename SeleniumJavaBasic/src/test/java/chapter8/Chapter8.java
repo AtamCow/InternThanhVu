@@ -33,18 +33,18 @@ public class Chapter8 extends BaseSetup {
         cf.navigateRailway();
 
         // Login
-        pageBase.changePage("Login");
+        loginPage.changePage();
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
         // Change to Timetable tab
-        pageBase.changePage("Timetable");
+        timetablePage.changePage();
         timetablePage.checkPrice(cf.departFrom, cf.arriveAt);
 
         ticketPricePage.bookTicketInTicketPrice(cf.seatType);
 
         bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.loginSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
     }
 
     @After
