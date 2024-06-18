@@ -2,6 +2,7 @@ package chapter8;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import models.Ticket;
 import org.junit.*;
 
 import pages.*;
@@ -16,6 +17,8 @@ public class Chapter8 extends BaseSetup {
     private BookTicketSuccessfulPage bookTicketSuccessfulPage;
     private PageBase pageBase;
 
+    private Ticket ticketInfo;
+
     @Before
     public void setUp() {
         super.setup();
@@ -26,6 +29,8 @@ public class Chapter8 extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
         pageBase = new PageBase(getDriver());
+
+        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
     }
 
     @Test
@@ -42,9 +47,10 @@ public class Chapter8 extends BaseSetup {
 
         ticketPricePage.bookTicketInTicketPrice(cf.seatType);
 
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
+        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
     }
 
     @After

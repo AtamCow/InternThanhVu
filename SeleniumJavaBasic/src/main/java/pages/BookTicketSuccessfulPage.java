@@ -1,5 +1,6 @@
 package pages;
 
+import models.Ticket;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,18 +24,16 @@ public class BookTicketSuccessfulPage {
     private String tdDepartDate = "4";
     private String tdAmount = "7";
 
-    public void checkTicketInfo (String expectedMessage, String departstationExpected, String arrivestationExpected, String seattypeExpected, String departdateExpected, String amountExpected) {
+    public void checkTicketInfo (Ticket ticket) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(departdateExpected)).format(formatter);
+        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(ticket.getDepartDate())).format(formatter);
 
-        By h1Message = By.xpath(h1MessageXpath);
         By departStation = By.xpath(String.format(tdInformation, tdDepartStation));
         By arriveStation = By.xpath(String.format(tdInformation,tdArriveStation));
         By seatType = By.xpath(String.format(tdInformation,tdseatType));
         By departDate = By.xpath(String.format(tdInformation,tdDepartDate));
         By amount = By.xpath(String.format(tdInformation,tdAmount));
 
-        String successMessage = driver.findElement(h1Message).getText();
         String departStationValue = driver.findElement(departStation).getText();
         String arriveStationValue = driver.findElement(arriveStation).getText();
         String seatTypeValue = driver.findElement(seatType).getText();
@@ -43,10 +42,47 @@ public class BookTicketSuccessfulPage {
 
         int checkValue = 0;
 
-        if (!expectedMessage.equals(successMessage)) {
+        if (!ticket.getDepartStation().equals(departStationValue)) {
             checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",successMessage, expectedMessage));
+            System.out.println(String.format("Record value: %s, Expected value: %s",departStationValue, ticket.getDepartStation()));
         }
+        if (!ticket.getArriveAt().equals(arriveStationValue)) {
+            checkValue += 1;
+            System.out.println(String.format("Record value: %s, Expected value: %s",arriveStationValue, ticket.getArriveAt()));
+        }
+        if (!ticket.getSeatType().equals(seatTypeValue)) {
+            checkValue += 1;
+            System.out.println(String.format("Record value: %s, Expected value: %s",seatTypeValue, ticket.getSeatType()));
+        }
+        if (!checkedDate.equals(departDateValue)) {
+            checkValue += 1;
+            System.out.println(String.format("Record value: %s, Expected value: %s",departDateValue, checkedDate));
+        }
+        if (!ticket.getTicketAmount().equals(amountValue)) {
+            checkValue += 1;
+            System.out.println(String.format("Record value: %s, Expected value: %s",amountValue, ticket.getTicketAmount()));
+        }
+        Assert.assertEquals(0, checkValue);
+    }
+
+    public void checkTicketInfo (String departDateExpected, String departstationExpected, String arrivestationExpected, String seattypeExpected, String amountExpected) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(departDateExpected)).format(formatter);
+
+        By departStation = By.xpath(String.format(tdInformation, tdDepartStation));
+        By arriveStation = By.xpath(String.format(tdInformation,tdArriveStation));
+        By seatType = By.xpath(String.format(tdInformation,tdseatType));
+        By departDate = By.xpath(String.format(tdInformation,tdDepartDate));
+        By amount = By.xpath(String.format(tdInformation,tdAmount));
+
+        String departStationValue = driver.findElement(departStation).getText();
+        String arriveStationValue = driver.findElement(arriveStation).getText();
+        String seatTypeValue = driver.findElement(seatType).getText();
+        String departDateValue = driver.findElement(departDate).getText();
+        String amountValue = driver.findElement(amount).getText();
+
+        int checkValue = 0;
+
         if (!departstationExpected.equals(departStationValue)) {
             checkValue += 1;
             System.out.println(String.format("Record value: %s, Expected value: %s",departStationValue, departstationExpected));
@@ -68,5 +104,11 @@ public class BookTicketSuccessfulPage {
             System.out.println(String.format("Record value: %s, Expected value: %s",amountValue, amountExpected));
         }
         Assert.assertEquals(0, checkValue);
+    }
+
+    public void checkBookedSuccessfulMessage(String expectedMessage) {
+        By h1Message = By.xpath(h1MessageXpath);
+        String successMessage = driver.findElement(h1Message).getText();
+        Assert.assertEquals(expectedMessage, successMessage);
     }
 }

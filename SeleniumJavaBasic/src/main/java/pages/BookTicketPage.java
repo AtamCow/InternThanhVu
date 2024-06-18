@@ -1,7 +1,7 @@
 package pages;
 
-import org.junit.Assert;
-import org.junit.Before;
+import models.*;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,15 +29,15 @@ public class BookTicketPage {
     private String ticketamountSelect = "//select[@name='TicketAmount']//option[@value='%s']";
     private String bookTicketButton = "//div[@id='content']//form//input[@value='Book ticket']";
 
-    public void bookTicket(String departdate, String departfrom, String arriverat, String seattype, String ticketamount) {
-        selectDepartDate(departdate);
-        selectDepartStation(departfrom);
+    public void bookTicket(Ticket ticket) {
+        selectDepartDate(ticket.getDepartDate());
+        selectDepartStation(ticket.getDepartStation());
 
         pageBase.waitMiliSec(2000);
 
-        selectArriveStation(arriverat);
-        selectSeatType(seattype);
-        selectAmount(ticketamount);
+        selectArriveStation(ticket.getArriveAt());
+        selectSeatType(ticket.getSeatType());
+        selectAmount(ticket.getTicketAmount());
 
         clickBookticketButton();
     }

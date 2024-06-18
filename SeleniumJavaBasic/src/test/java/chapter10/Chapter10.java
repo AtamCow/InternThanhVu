@@ -2,6 +2,7 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import models.Ticket;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public class Chapter10 extends BaseSetup {
     private ForgotPasswordPage forgotPasswordPage;
     private MyTicketPage myTicketPage;
 
+    private Ticket ticketInfo;
+    private Ticket ticketsInfo;
+
     @Before
     public void setUp() {
         super.setup();
@@ -41,6 +45,9 @@ public class Chapter10 extends BaseSetup {
         changePasswordPage = new ChangePasswordPage(getDriver());
         myTicketPage = new MyTicketPage(getDriver());
         forgotPasswordPage = new ForgotPasswordPage(getDriver());
+
+        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        ticketsInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmounts);
     }
 
     @Test //User can log into Railway with valid username and password
@@ -218,9 +225,10 @@ public class Chapter10 extends BaseSetup {
 
         bookTicketPage.changePage();
 
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
+        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
     }
 
     @Test //User can book many tickets at a time
@@ -231,9 +239,10 @@ public class Chapter10 extends BaseSetup {
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
         bookTicketPage.changePage();
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmounts);
+        bookTicketPage.bookTicket(ticketsInfo);
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmounts  );
+        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
+        bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo);
     }
 
     @Test //User can check price of ticket from Timetable
@@ -267,7 +276,8 @@ public class Chapter10 extends BaseSetup {
         bookTicketPage.selectAmount(cf.ticketAmount);
         bookTicketPage.clickBookticketButton();
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
+        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
     }
 
     @Test //User can cancel a ticket
@@ -277,7 +287,7 @@ public class Chapter10 extends BaseSetup {
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
         bookTicketPage.changePage();
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
 
         myTicketPage.changePage();
         myTicketPage.cancelTicket(cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount);

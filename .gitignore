@@ -7,7 +7,7 @@ target/
 
 # Không bỏ qua các file .xml
 !*.xml
-!.iml
+.iml
 
 # Không bỏ qua thư mục source và tất cả nội dung bên trong
 !source/

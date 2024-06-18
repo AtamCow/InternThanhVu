@@ -2,28 +2,29 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import models.User;
+import org.testng.annotations.*;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class LoginTC extends BaseSetup {
     private ConfigTest cf;
-
     private LoginPage loginPage;
     private FAQPage faqPage;
     private HomePage homePage;
     private RegisterPage registerPage;
-    private TimetablePage timetablePage;
-    private TicketPricePage ticketPricePage;
-    private BookTicketPage bookTicketPage;
-    private BookTicketSuccessfulPage bookTicketSuccessfulPage;
-    private PageBase pageBase;
-    private GuerrillamailPage guerrillamailPage;
-    private ChangePasswordPage changePasswordPage;
-    private ForgotPasswordPage forgotPasswordPage;
 
-    @Before
+    private User user;
+
+    private User validUser;
+    private User blankEmailUser;
+    private User blankPassUser;
+    private User invalidPassUser;
+    private User registerUser;
+    private User inactiveUser;
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -31,15 +32,16 @@ public class LoginTC extends BaseSetup {
         faqPage = new FAQPage(getDriver());
         homePage = new HomePage(getDriver());
         registerPage = new RegisterPage(getDriver());
-        timetablePage = new TimetablePage(getDriver());
-        ticketPricePage = new TicketPricePage(getDriver());
-        bookTicketPage = new BookTicketPage(getDriver());
-        bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
-        pageBase = new PageBase(getDriver());
-        guerrillamailPage = new GuerrillamailPage(getDriver());
-        changePasswordPage = new ChangePasswordPage(getDriver());
-        forgotPasswordPage = new ForgotPasswordPage(getDriver());
+
+        validUser = new User(cf.validLogEmail, cf.logPassword);
+        blankEmailUser = new User("", cf.logPassword);
+        blankPassUser = new User(cf.validLogEmail, "");
+        invalidPassUser = new User(cf.validLogEmail, cf.invalidPassword);
+
+        registerUser = new User(cf.reEmail, cf.logPassword, cf.rePid);
+        inactiveUser = new User(cf.reEmail, cf.logPassword);
     }
+
 
     @Test //User can log into Railway with valid username and password
     public void TC01() {
@@ -47,7 +49,8 @@ public class LoginTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+
+        loginPage.login(validUser);
 
         homePage.checkWelcomeMessage(cf.validLogEmail);
     }
@@ -58,7 +61,9 @@ public class LoginTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login("", cf.logPassword);
+        user.setEmail("");
+
+        loginPage.login(validUser);
 
         loginPage.checkErrorMessage(cf.messageErrorLoginform);
         loginPage.checkLoginYet();
@@ -70,7 +75,7 @@ public class LoginTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.invalidPassword);
+        loginPage.login(blankPassUser);
 
         loginPage.checkErrorMessage(cf.messageErrorLoginform);
     }
@@ -83,12 +88,11 @@ public class LoginTC extends BaseSetup {
         loginPage.changePage();
 
         for (int i = 0; i < 4; i++) {
-            loginPage.login(cf.validLogEmail, cf.invalidPassword);
+            loginPage.login(invalidPassUser);
             loginPage.checkErrorMessage(cf.messageInvalidLoginform);
         }
         loginPage.checkLoginYet();
         loginPage.checkExistMessage(cf.messageWarningLoginform);
-
     }
 
     @Test //User can't login with an account hasn't been activated
@@ -97,17 +101,18 @@ public class LoginTC extends BaseSetup {
 
         //Register
         registerPage.changePage();
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
+
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(inactiveUser);
 
         loginPage.checkLoginYet();
         loginPage.checkErrorMessage(cf.messageInvalidLoginform);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

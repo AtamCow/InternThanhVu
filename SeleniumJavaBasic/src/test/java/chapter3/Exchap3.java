@@ -2,6 +2,7 @@ package chapter3;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import models.Ticket;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,8 @@ public class Exchap3 extends BaseSetup {
     private RegisterPage registerPage;
     private GuerrillamailPage guerrillamailPage;
 
+    private Ticket ticketInfo;
+
     @Before
     public void setUp() {
         super.setup();
@@ -25,6 +28,9 @@ public class Exchap3 extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         guerrillamailPage = new GuerrillamailPage(getDriver());
         pageBase = new PageBase(getDriver());
+
+        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+
     }
 
     @Test
@@ -49,7 +55,7 @@ public class Exchap3 extends BaseSetup {
 
         bookTicketPage.changePage();
 
-        bookTicketPage.bookTicket(cf.departDate, "Phan Thiết", cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
     }
 
     @After

@@ -1,5 +1,6 @@
 package pages;
 
+import models.Ticket;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -29,6 +30,35 @@ public class MyTicketPage {
 
     public String buttonFirstTicketCancel = "//div[@id='content']//table[@class='MyTable']//tr[td[text()='%s'] and td[text()='%s'] and td[text()='%s'] and td[text()='%s'] and td[text()='%s']][1]//input";
 
+    public void cancelTicket(Ticket ticket) {
+      //  String departstation, String arrivestation, String seattype, String departdate, String amount
+        String departstation = ticket.getDepartStation();
+        String arrivestation = ticket.getArriveAt();
+        String seattype = ticket.getSeatType();
+        String departdate = ticket.getDepartDate();
+        String amount = ticket.getTicketAmount();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        String checkDate = LocalDate.now().plusDays(Integer.parseInt(departdate)).format(formatter);
+
+        // Get ticket number has the same information
+        List<WebElement> ticketBefore = driver.findElements(By.xpath(String.format(trTicketCancel, departstation, arrivestation, seattype, checkDate, amount)));
+        int ticketBeforeNum = ticketBefore.size();
+
+        WebElement cancelButton = driver.findElement(By.xpath(String.format(buttonFirstTicketCancel, departstation, arrivestation, seattype, checkDate, amount)));
+        cancelButton.click();
+
+        // Wait for Alert item
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        alert.accept();
+
+        List<WebElement> ticketAfter = driver.findElements(By.xpath(String.format(trTicketCancel, departstation, arrivestation, seattype, checkDate, amount)));
+        int ticketAfterNum = ticketAfter.size();
+
+        Assert.assertEquals(ticketAfterNum, ticketBeforeNum - 1);
+    }
+
     public void cancelTicket(String departstation, String arrivestation, String seattype, String departdate, String amount) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
         String checkDate = LocalDate.now().plusDays(Integer.parseInt(departdate)).format(formatter);
@@ -49,6 +79,5 @@ public class MyTicketPage {
         int ticketAfterNum = ticketAfter.size();
 
         Assert.assertEquals(ticketAfterNum, ticketBeforeNum - 1);
-
     }
 }

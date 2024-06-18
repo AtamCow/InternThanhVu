@@ -2,6 +2,7 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import models.Ticket;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ public class CancelTicketTC extends BaseSetup {
     private BookTicketPage bookTicketPage;
     private MyTicketPage myTicketPage;
 
+    private Ticket ticketInfo;
+
     @Before
     public void setUp() {
         super.setup();
@@ -21,6 +24,9 @@ public class CancelTicketTC extends BaseSetup {
         loginPage = new LoginPage(getDriver());
         bookTicketPage = new BookTicketPage(getDriver());
         myTicketPage = new MyTicketPage(getDriver());
+
+        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+
     }
 
     @Test //User can cancel a ticket
@@ -30,7 +36,7 @@ public class CancelTicketTC extends BaseSetup {
         loginPage.login(cf.validLogEmail, cf.logPassword);
 
         bookTicketPage.changePage();
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
 
         myTicketPage.changePage();
         myTicketPage.cancelTicket(cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount);

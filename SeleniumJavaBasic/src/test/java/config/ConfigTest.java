@@ -1,6 +1,22 @@
 package config;
 
+import models.User;
 import org.openqa.selenium.WebDriver;
+
+
+enum DepartDate {
+    DAY_25("25");
+
+    private String value;
+
+    DepartDate(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+}
 
 public class ConfigTest {
     private WebDriver driver;
@@ -13,9 +29,11 @@ public class ConfigTest {
     public String idEmail = "vcasdfe";
     public String hostEmail = "grr.la";
     public String validLogEmail = idEmail + "@" + hostEmail;
+
     public String reIdEmail = "asfgrdcvsdw";
     public String reHostEmail = "grr.la";
     public String reEmail = reIdEmail + "@" + reHostEmail;
+
     public String invalidEmail = "vfsdfrd@cijd.dfe";
     public String logPassword = "1234qwer";
     public String invalidPassword = "12341234";
@@ -27,7 +45,9 @@ public class ConfigTest {
     public String arriveAt = "Sài Gòn";
     public String seatType = "Soft seat";
     public String ticketAmount = "1";
-    public String ticketAmounts = "1";
+    public String ticketAmounts = "2";
+
+
 
     public String bookSuccessfullMessage = "Ticket booked successfully!";
 

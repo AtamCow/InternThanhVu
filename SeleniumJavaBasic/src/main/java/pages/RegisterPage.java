@@ -1,5 +1,6 @@
 package pages;
 
+import models.User;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -29,7 +30,7 @@ public class RegisterPage {
     By registerForm = By.xpath("//div[@id='content']//form[@id='RegisterForm']");
     By errorMessageAbove = By.xpath("//div[@id='content']//p[@class='message error']");
 
-    public void register(String mail, String pass, String pid) {
+    public void register(User user) {
         // Enter informations
         By registerEmailById = By.id("email");
         By registerPasswordById = By.id("password");
@@ -43,9 +44,32 @@ public class RegisterPage {
         WebElement registerPid = driver.findElement(registerPidById);
         WebElement registerButton = driver.findElement(registerButtonByXpath);
 
-        registerEmail.sendKeys(mail);
-        registerPassword.sendKeys(pass);
-        registerConfirmPassword.sendKeys(pass);
+        registerEmail.sendKeys(user.getEmail());
+        registerPassword.sendKeys(user.getPassword());
+        registerConfirmPassword.sendKeys(user.getPassword());
+        registerPid.sendKeys(user.getPid());
+
+        pageBase.scrollView(registerButton);
+        registerButton.click();
+    }
+
+    public void register(String email, String password, String pid) {
+        // Enter informations
+        By registerEmailById = By.id("email");
+        By registerPasswordById = By.id("password");
+        By registerConfirmPassById = By.id("confirmPassword");
+        By registerPidById = By.id("pid");
+        By registerButtonByXpath = By.xpath("//form[@id='RegisterForm']//input[@value='Register']");
+
+        WebElement registerEmail = driver.findElement(registerEmailById);
+        WebElement registerPassword = driver.findElement(registerPasswordById);
+        WebElement registerConfirmPassword = driver.findElement(registerConfirmPassById);
+        WebElement registerPid = driver.findElement(registerPidById);
+        WebElement registerButton = driver.findElement(registerButtonByXpath);
+
+        registerEmail.sendKeys(email);
+        registerPassword.sendKeys(password);
+        registerConfirmPassword.sendKeys(password);
         registerPid.sendKeys(pid);
 
         pageBase.scrollView(registerButton);

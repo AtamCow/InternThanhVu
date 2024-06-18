@@ -16,6 +16,8 @@ public class PageBase {
         this.driver = driver;
     }
 
+    private String tabPath = "//div[@id='menu']//a//span[text()='%s']";
+
     public void scrollView(Object element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", element);
@@ -46,7 +48,7 @@ public class PageBase {
     }
 
     public boolean checkTabExisted(String tabName) {
-        int tabExist = driver.findElements(By.linkText(tabName)).size();
+        int tabExist = driver.findElements(By.xpath(String.format(tabPath, tabName))).size();
         if (tabExist == 0)
             return false;
         else

@@ -2,9 +2,8 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import models.User;
 import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pages.*;
 
 public class LogoutTC extends BaseSetup {
@@ -14,6 +13,8 @@ public class LogoutTC extends BaseSetup {
     private FAQPage faqPage;
     private PageBase pageBase;
 
+    private User validUser;
+
     @Before
     public void setUp() {
         super.setup();
@@ -21,6 +22,8 @@ public class LogoutTC extends BaseSetup {
         loginPage = new LoginPage(getDriver());
         faqPage = new FAQPage(getDriver());
         pageBase = new PageBase(getDriver());
+
+        validUser = new User(cf.validLogEmail, cf.logPassword);
     }
 
     @Test //User is redirected to Home page after logging out
@@ -29,7 +32,7 @@ public class LogoutTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         faqPage.changePage();
         pageBase.logOut();
