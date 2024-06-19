@@ -2,10 +2,16 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import enums.DepartDate;
+import enums.Location;
+import enums.SeatType;
+import enums.TicketAmount;
 import models.Ticket;
-import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class CancelTicketTC extends BaseSetup {
@@ -17,7 +23,13 @@ public class CancelTicketTC extends BaseSetup {
 
     private Ticket ticketInfo;
 
-    @Before
+    String departDate = DepartDate.DAY_25.getDate();
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = TicketAmount.ONE.getAmount();
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -25,7 +37,7 @@ public class CancelTicketTC extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         myTicketPage = new MyTicketPage(getDriver());
 
-        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
 
     }
 
@@ -39,10 +51,10 @@ public class CancelTicketTC extends BaseSetup {
         bookTicketPage.bookTicket(ticketInfo);
 
         myTicketPage.changePage();
-        myTicketPage.cancelTicket(cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount);
+        myTicketPage.cancelTicket(departStation, arriveStation, seatType, departDate, ticketAmount);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

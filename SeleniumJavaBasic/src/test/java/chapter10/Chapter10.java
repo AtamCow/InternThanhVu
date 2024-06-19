@@ -2,10 +2,12 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import models.Ticket;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import enums.*;
+import models.*;
+import org.testng.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class Chapter10 extends BaseSetup {
@@ -28,7 +30,21 @@ public class Chapter10 extends BaseSetup {
     private Ticket ticketInfo;
     private Ticket ticketsInfo;
 
-    @Before
+    private User validUser;
+    private User blankEmailUser;
+    private User blankPassUser;
+    private User invalidPassUser;
+    private User registerUser;
+    private User inactiveUser;
+
+    String departDate = DepartDate.DAY_25.getDate();
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = TicketAmount.ONE.getAmount();
+    String ticketAmounts = TicketAmount.TWO.getAmount();
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -46,8 +62,17 @@ public class Chapter10 extends BaseSetup {
         myTicketPage = new MyTicketPage(getDriver());
         forgotPasswordPage = new ForgotPasswordPage(getDriver());
 
-        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
-        ticketsInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmounts);
+        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
+        ticketsInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmounts);
+
+
+        validUser = new User(cf.validLogEmail, cf.logPassword);
+        blankEmailUser = new User("", cf.logPassword);
+        blankPassUser = new User(cf.validLogEmail, "");
+        invalidPassUser = new User(cf.validLogEmail, cf.invalidPassword);
+
+        registerUser = new User(cf.reEmail, cf.logPassword, cf.rePid);
+        inactiveUser = new User(cf.reEmail, cf.logPassword);
     }
 
     @Test //User can log into Railway with valid username and password
@@ -56,9 +81,9 @@ public class Chapter10 extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
-        homePage.checkWelcomeMessage(cf.validLogEmail);
+        Assert.assertEquals(String.format("Welcome %s", cf.validLogEmail), homePage.checkWelcomeMessage());
     }
 
     @Test //User cannot login with blank "Username" textbox
@@ -67,10 +92,10 @@ public class Chapter10 extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login("", cf.logPassword);
+        loginPage.login(blankEmailUser);
 
-        loginPage.checkErrorMessage(cf.messageErrorLoginform);
-        loginPage.checkLoginYet();
+        Assert.assertEquals(cf.messageErrorLoginform, loginPage.checkErrorMessage());
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
     }
 
     @Test //User cannot log into Railway with invalid password
@@ -79,9 +104,9 @@ public class Chapter10 extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.invalidPassword);
+        loginPage.login(invalidPassUser);
 
-        loginPage.checkErrorMessage(cf.messageErrorLoginform);
+        Assert.assertEquals(cf.messageErrorLoginform, loginPage.checkErrorMessage());
     }
 
     @Test //System shows message when user enters wrong password many times
@@ -92,11 +117,11 @@ public class Chapter10 extends BaseSetup {
         loginPage.changePage();
 
         for (int i = 0; i < 4; i++) {
-            loginPage.login(cf.validLogEmail, cf.invalidPassword);
-            loginPage.checkErrorMessage(cf.messageInvalidLoginform);
+            loginPage.login(invalidPassUser);
+            Assert.assertEquals(cf.messageInvalidLoginform, loginPage.checkErrorMessage());
         }
-        loginPage.checkLoginYet();
-        loginPage.checkExistMessage(cf.messageWarningLoginform);
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
+        Assert.assertTrue(loginPage.checkExistMessage(cf.messageWarningLoginform), "Could not find message");
 
     }
 
@@ -106,14 +131,14 @@ public class Chapter10 extends BaseSetup {
 
         //Register
         registerPage.changePage();
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(inactiveUser);
 
-        loginPage.checkLoginYet();
-        loginPage.checkErrorMessage(cf.messageInvalidLoginform);
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
+        Assert.assertEquals(cf.messageInvalidLoginform, loginPage.checkErrorMessage());
     }
 
     @Test //User is redirected to Home page after logging out
@@ -122,23 +147,23 @@ public class Chapter10 extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         faqPage.changePage();
         pageBase.logOut();
 
         pageBase.waitMiliSec(1000);
-        pageBase.checkCurrentPage("Home");
-        pageBase.checkTabExisted("Log out");
+        Assert.assertTrue(pageBase.checkCurrentPage("Home"), "Home page do not display");
+        Assert.assertFalse(pageBase.checkTabExisted("Log out"), "Log out tab is appeared");
     }
-
+////////////////////////////////////////////////
     @Test //User can't create account with an already in-use email
     public void TC07() {
         cf.navigateRailway();
 
         // Login
         registerPage.changePage();
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
 
         registerPage.checkErrorMessageAbove(cf.messageErrorRegisterWithInvalidEmail);
     }
@@ -253,7 +278,7 @@ public class Chapter10 extends BaseSetup {
 
         timetablePage.changePage();
 
-        timetablePage.checkPrice(cf.departFrom, cf.arriveAt);
+        timetablePage.checkPrice(departStation, arriveStation);
 
         timetablePage.checkPriceSeattypeTable();
 
@@ -267,13 +292,13 @@ public class Chapter10 extends BaseSetup {
 
         timetablePage.changePage();
 
-        timetablePage.bookTicketInTimetable(cf.departFrom, cf.arriveAt);
+        timetablePage.bookTicketInTimetable(departStation, arriveStation);
 
-        bookTicketPage.checkInfoFromTimetable(cf.departFrom, cf.arriveAt);
+        bookTicketPage.checkInfoFromTimetable(departStation, arriveStation);
 
-        bookTicketPage.selectDepartDate(cf.departDate);
-        bookTicketPage.selectSeatType(cf.seatType);
-        bookTicketPage.selectAmount(cf.ticketAmount);
+        bookTicketPage.selectDepartDate(departDate);
+        bookTicketPage.selectSeatType(seatType);
+        bookTicketPage.selectAmount(ticketAmount);
         bookTicketPage.clickBookticketButton();
 
         bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
@@ -290,10 +315,10 @@ public class Chapter10 extends BaseSetup {
         bookTicketPage.bookTicket(ticketInfo);
 
         myTicketPage.changePage();
-        myTicketPage.cancelTicket(cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount);
+        myTicketPage.cancelTicket(departStation, arriveStation, seatType, departDate, ticketAmount);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

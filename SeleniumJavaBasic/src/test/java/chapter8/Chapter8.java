@@ -2,9 +2,15 @@ package chapter8;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import enums.DepartDate;
+import enums.Location;
+import enums.SeatType;
+import enums.TicketAmount;
 import models.Ticket;
-import org.junit.*;
 
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class Chapter8 extends BaseSetup {
@@ -19,7 +25,13 @@ public class Chapter8 extends BaseSetup {
 
     private Ticket ticketInfo;
 
-    @Before
+    String departDate = DepartDate.DAY_25.getDate();
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = TicketAmount.ONE.getAmount();
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -30,7 +42,7 @@ public class Chapter8 extends BaseSetup {
         bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
         pageBase = new PageBase(getDriver());
 
-        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
     }
 
     @Test
@@ -43,9 +55,9 @@ public class Chapter8 extends BaseSetup {
 
         // Change to Timetable tab
         timetablePage.changePage();
-        timetablePage.checkPrice(cf.departFrom, cf.arriveAt);
+        timetablePage.checkPrice(departStation, arriveStation);
 
-        ticketPricePage.bookTicketInTicketPrice(cf.seatType);
+        ticketPricePage.bookTicketInTicketPrice(seatType);
 
         bookTicketPage.bookTicket(ticketInfo);
 
@@ -53,7 +65,7 @@ public class Chapter8 extends BaseSetup {
         bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

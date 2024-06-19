@@ -3,7 +3,9 @@ package chapter10;
 import base.BaseSetup;
 import config.ConfigTest;
 import models.User;
-import org.junit.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class LogoutTC extends BaseSetup {
@@ -15,7 +17,7 @@ public class LogoutTC extends BaseSetup {
 
     private User validUser;
 
-    @Before
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf = new ConfigTest(getDriver());
@@ -42,7 +44,7 @@ public class LogoutTC extends BaseSetup {
         pageBase.checkTabExisted("Log out");
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

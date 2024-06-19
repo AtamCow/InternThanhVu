@@ -1,61 +1,15 @@
 package models;
 
 
-class Tickets {
-    private String departDate;
-    private String departStation;
-    private String arriveAt;
-    private String seatType;
-    private String ticketAmount;
-
-    enum DepartDate {
-        DAY_25("25");
-
-        private String value;
-
-        DepartDate(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
-
-
-//    public DepartDate departDate = DepartDate.DAY_25;
-
-    public Tickets(String departdate, String departStation, String arriveAt, String seatType, String ticketAmount) {
-        this.departDate = departdate;
-        this.departStation = departStation;
-        this.arriveAt = arriveAt;
-        this.seatType = seatType;
-        this.ticketAmount = ticketAmount;
-    }
-
-    public String getDepartStation() {
-        return departStation;
-    }
-
-    public String getArriveAt() {
-        return arriveAt;
-    }
-
-    public String getSeatType() {
-        return seatType;
-    }
-
-    public String getTicketAmount() {
-        return ticketAmount;
-    }
-}
-
 public class Ticket {
     private String departDate;
     private String departStation;
     private String arriveAt;
     private String seatType;
     private String ticketAmount;
+
+//    public DepartDateEnum DepartDate = DepartDateEnum.DAY_25;
+
 
     public Ticket(String departDate, String departStation, String arriveAt, String seatType, String ticketAmount) {
         this.departDate = departDate;

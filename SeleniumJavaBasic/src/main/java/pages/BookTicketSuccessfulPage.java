@@ -24,6 +24,8 @@ public class BookTicketSuccessfulPage {
     private String tdDepartDate = "4";
     private String tdAmount = "7";
 
+
+
     public void checkTicketInfo (Ticket ticket) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
         String checkedDate = LocalDate.now().plusDays(Integer.parseInt(ticket.getDepartDate())).format(formatter);
@@ -63,47 +65,8 @@ public class BookTicketSuccessfulPage {
             System.out.println(String.format("Record value: %s, Expected value: %s",amountValue, ticket.getTicketAmount()));
         }
         Assert.assertEquals(0, checkValue);
-    }
 
-    public void checkTicketInfo (String departDateExpected, String departstationExpected, String arrivestationExpected, String seattypeExpected, String amountExpected) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(departDateExpected)).format(formatter);
 
-        By departStation = By.xpath(String.format(tdInformation, tdDepartStation));
-        By arriveStation = By.xpath(String.format(tdInformation,tdArriveStation));
-        By seatType = By.xpath(String.format(tdInformation,tdseatType));
-        By departDate = By.xpath(String.format(tdInformation,tdDepartDate));
-        By amount = By.xpath(String.format(tdInformation,tdAmount));
-
-        String departStationValue = driver.findElement(departStation).getText();
-        String arriveStationValue = driver.findElement(arriveStation).getText();
-        String seatTypeValue = driver.findElement(seatType).getText();
-        String departDateValue = driver.findElement(departDate).getText();
-        String amountValue = driver.findElement(amount).getText();
-
-        int checkValue = 0;
-
-        if (!departstationExpected.equals(departStationValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",departStationValue, departstationExpected));
-        }
-        if (!arrivestationExpected.equals(arriveStationValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",arriveStationValue, arrivestationExpected));
-        }
-        if (!seattypeExpected.equals(seatTypeValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",seatTypeValue, seattypeExpected));
-        }
-        if (!checkedDate.equals(departDateValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",departDateValue, checkedDate));
-        }
-        if (!amountExpected.equals(amountValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",amountValue, amountExpected));
-        }
-        Assert.assertEquals(0, checkValue);
     }
 
     public void checkBookedSuccessfulMessage(String expectedMessage) {

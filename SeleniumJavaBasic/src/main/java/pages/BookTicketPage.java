@@ -33,7 +33,7 @@ public class BookTicketPage {
         selectDepartDate(ticket.getDepartDate());
         selectDepartStation(ticket.getDepartStation());
 
-        pageBase.waitMiliSec(2000);
+        BookTicketPage untils = new BookTicketPage(driver);
 
         selectArriveStation(ticket.getArriveAt());
         selectSeatType(ticket.getSeatType());
@@ -55,8 +55,10 @@ public class BookTicketPage {
 
     public void selectArriveStation(String arriveStation) {
         By ticketArriveStationSelect = By.xpath(String.format(arriverAtSelect, arriveStation));
-        driver.findElement(ticketArriveStationSelect).click();
+        WebElement arriveAt = driver.findElement(ticketArriveStationSelect);
 
+        BookTicketPage untils = new BookTicketPage(driver);
+        untils.pageBase.wait(arriveAt).click();
     }
 
     public void selectSeatType(String seattypeSelect) {

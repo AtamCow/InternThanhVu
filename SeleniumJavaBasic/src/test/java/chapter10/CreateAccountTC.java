@@ -2,9 +2,12 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import org.junit.*;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class CreateAccountTC extends BaseSetup {
@@ -15,7 +18,7 @@ public class CreateAccountTC extends BaseSetup {
     private PageBase pageBase;
     private GuerrillamailPage guerrillamailPage;
 
-    @Before
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -70,7 +73,7 @@ public class CreateAccountTC extends BaseSetup {
         registerPage.checkConfirmed(cf.messageConfirmedRegister);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

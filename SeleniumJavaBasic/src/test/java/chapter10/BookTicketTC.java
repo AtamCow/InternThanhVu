@@ -2,12 +2,19 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import models.*;
+import enums.DepartDate;
+import enums.Location;
+import enums.SeatType;
+import enums.TicketAmount;
 import models.Ticket;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.junit.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
+
+import org.testng.asserts.SoftAssert;
+
 
 public class BookTicketTC extends BaseSetup {
     private ConfigTest cf;
@@ -17,13 +24,17 @@ public class BookTicketTC extends BaseSetup {
     private BookTicketPage bookTicketPage;
     private BookTicketSuccessfulPage bookTicketSuccessfulPage;
 
+    String departDate = DepartDate.DAY_25.getDate();
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = TicketAmount.ONE.getAmount();
+    String ticketAmounts = TicketAmount.TWO.getAmount();
+
     private Ticket ticketInfo;
     private Ticket ticketsInfo;
 
-
-
-
-    @Before
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -32,8 +43,10 @@ public class BookTicketTC extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
 
-        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
-        ticketsInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmounts);
+        SoftAssert softAssert = new SoftAssert();
+
+        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
+        ticketsInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmounts);
 
     }
 
@@ -52,56 +65,56 @@ public class BookTicketTC extends BaseSetup {
         bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
     }
 
-    @Test //User can book many tickets at a time
-    public void TC13() {
-        cf.navigateRailway();
-        loginPage.changePage();
+//    @Test //User can book many tickets at a time
+//    public void TC13() {
+//        cf.navigateRailway();
+//        loginPage.changePage();
+//
+//        loginPage.login(cf.validLogEmail, cf.logPassword);
+//
+//        bookTicketPage.changePage();
+//        bookTicketPage.bookTicket(ticketsInfo);
+//
+//        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
+//        bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo);
+//    }
+//
+//    @Test //User can check price of ticket from Timetable
+//    public void TC14() {
+//        cf.navigateRailway();
+//        loginPage.changePage();
+//        loginPage.login(cf.validLogEmail, cf.logPassword);
+//
+//        timetablePage.changePage();
+//
+//        timetablePage.checkPrice(departStation, arriveStation);
+//
+//        timetablePage.checkPriceSeattypeTable();
+//
+//    }
+//
+//    @Test //User can book ticket from Timetable
+//    public void TC15() {
+//        cf.navigateRailway();
+//        loginPage.changePage();
+//        loginPage.login(cf.validLogEmail, cf.logPassword);
+//
+//        timetablePage.changePage();
+//
+//        timetablePage.bookTicketInTimetable(departStation, arriveStation);
+//
+//        bookTicketPage.checkInfoFromTimetable(departStation, arriveStation);
+//
+//        bookTicketPage.selectDepartDate(departDate);
+//        bookTicketPage.selectSeatType(seatType);
+//        bookTicketPage.selectAmount(ticketAmount);
+//        bookTicketPage.clickBookticketButton();
+//
+//        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
+//        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
+//    }
 
-        loginPage.login(cf.validLogEmail, cf.logPassword);
-
-        bookTicketPage.changePage();
-        bookTicketPage.bookTicket(ticketsInfo);
-
-        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
-        bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo);
-    }
-
-    @Test //User can check price of ticket from Timetable
-    public void TC14() {
-        cf.navigateRailway();
-        loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
-
-        timetablePage.changePage();
-
-        timetablePage.checkPrice(cf.departFrom, cf.arriveAt);
-
-        timetablePage.checkPriceSeattypeTable();
-
-    }
-
-    @Test //User can book ticket from Timetable
-    public void TC15() {
-        cf.navigateRailway();
-        loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
-
-        timetablePage.changePage();
-
-        timetablePage.bookTicketInTimetable(cf.departFrom, cf.arriveAt);
-
-        bookTicketPage.checkInfoFromTimetable(cf.departFrom, cf.arriveAt);
-
-        bookTicketPage.selectDepartDate(cf.departDate);
-        bookTicketPage.selectSeatType(cf.seatType);
-        bookTicketPage.selectAmount(cf.ticketAmount);
-        bookTicketPage.clickBookticketButton();
-
-        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
-        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
-    }
-
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

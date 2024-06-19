@@ -1,7 +1,6 @@
 package pages;
 
 import models.User;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,29 +54,28 @@ public class LoginPage {
         loginBtn.click();
     }
 
-    public void checkErrorMessage(String expectedMessage) {
+    public String checkErrorMessage() {
         String recordMessage = driver.findElement(messageErrorLoginForm).getText();
-
-        Assert.assertEquals(expectedMessage, recordMessage);
+        return recordMessage;
     }
 
-    public void checkLoginYet() {
-        int check = 0;
+    public boolean checkLoginYet() {
+        boolean check = true;
         boolean loginTabExist = pageBase.checkTabExisted("Login");
         boolean logoutTabExist = pageBase.checkTabExisted("Log out");
-        if (loginTabExist == false && logoutTabExist == true)
-            check += 1;
+        if (loginTabExist == true && logoutTabExist == false)
+            check = false;
 
-        Assert.assertEquals(0, check);
+        return check;
     }
 
-    public void checkExistMessage(String expectedMessage) {
+    public boolean checkExistMessage(String expectedMessage) {
         By textContains = By.xpath(String.format("//*[contains(text(), '%s')]", expectedMessage));
-
         int exitsText = driver.findElements(textContains).size();
 
-        Assert.assertEquals(1, exitsText);
-        if (exitsText == 1)
-            System.out.println("Could not find message");
+        if (exitsText == 0)
+            return false;
+        else
+            return true;
     }
 }

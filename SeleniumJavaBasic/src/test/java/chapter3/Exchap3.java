@@ -2,10 +2,14 @@ package chapter3;
 
 import base.BaseSetup;
 import config.ConfigTest;
+import enums.DepartDate;
+import enums.Location;
+import enums.SeatType;
+import enums.TicketAmount;
 import models.Ticket;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 
@@ -19,7 +23,13 @@ public class Exchap3 extends BaseSetup {
 
     private Ticket ticketInfo;
 
-    @Before
+    String departDate = DepartDate.DAY_25.getDate();
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = TicketAmount.ONE.getAmount();
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf = new ConfigTest(getDriver());
@@ -29,7 +39,7 @@ public class Exchap3 extends BaseSetup {
         guerrillamailPage = new GuerrillamailPage(getDriver());
         pageBase = new PageBase(getDriver());
 
-        ticketInfo = new Ticket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
 
     }
 
@@ -58,7 +68,7 @@ public class Exchap3 extends BaseSetup {
         bookTicketPage.bookTicket(ticketInfo);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

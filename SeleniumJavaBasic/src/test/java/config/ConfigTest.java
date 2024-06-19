@@ -1,22 +1,7 @@
 package config;
 
-import models.User;
 import org.openqa.selenium.WebDriver;
 
-
-enum DepartDate {
-    DAY_25("25");
-
-    private String value;
-
-    DepartDate(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-}
 
 public class ConfigTest {
     private WebDriver driver;
@@ -38,16 +23,6 @@ public class ConfigTest {
     public String logPassword = "1234qwer";
     public String invalidPassword = "12341234";
     public String rePid = "12341234";
-
-    // Ticket informations
-    public String departDate = "25";
-    public String departFrom = "Đà Nẵng";
-    public String arriveAt = "Sài Gòn";
-    public String seatType = "Soft seat";
-    public String ticketAmount = "1";
-    public String ticketAmounts = "2";
-
-
 
     public String bookSuccessfullMessage = "Ticket booked successfully!";
 
