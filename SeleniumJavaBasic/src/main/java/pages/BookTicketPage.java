@@ -1,12 +1,10 @@
 package pages;
 
 import models.*;
-import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import pages.*;
 
 public class BookTicketPage {
     private WebDriver driver;
@@ -81,7 +79,7 @@ public class BookTicketPage {
         bookTicketButton.click();
     }
 
-    public void checkInfoFromTimetable(String departStation, String arriverAt) {
+    public String checkInfoFromTimetable(String departStation, String arriverAt) {
         WebElement departsation = driver.findElement(By.xpath("//select[@name='DepartStation']"));
         Select selectDepartStation = new Select(departsation);
         String departStationSelect = selectDepartStation.getFirstSelectedOption().getText();
@@ -90,8 +88,6 @@ public class BookTicketPage {
         Select selectArriveStation = new Select(arrivestation);
         String arriveStationSelect = selectArriveStation.getFirstSelectedOption().getText();
 
-        Assert.assertEquals(departStation, departStationSelect);
-        Assert.assertEquals(arriverAt, arriveStationSelect);
+        return departStationSelect + arriveStationSelect;
     }
-
 }

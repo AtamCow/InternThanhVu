@@ -8,6 +8,8 @@ import enums.SeatType;
 import enums.TicketAmount;
 import models.Ticket;
 //import org.junit.*;
+import models.User;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -23,6 +25,8 @@ public class BookTicketTC extends BaseSetup {
     private TimetablePage timetablePage;
     private BookTicketPage bookTicketPage;
     private BookTicketSuccessfulPage bookTicketSuccessfulPage;
+
+    private User validUser;
 
     String departDate = DepartDate.DAY_25.getDate();
     String departStation = Location.DA_NANG.getLocation();
@@ -43,7 +47,7 @@ public class BookTicketTC extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
 
-        SoftAssert softAssert = new SoftAssert();
+        validUser = new User(cf.validLogEmail, cf.logPassword);
 
         ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
         ticketsInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmounts);
@@ -54,65 +58,62 @@ public class BookTicketTC extends BaseSetup {
     public void TC12() {
         cf.navigateRailway();
         loginPage.changePage();
-
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         bookTicketPage.changePage();
-
         bookTicketPage.bookTicket(ticketInfo);
 
-        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
-        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
     }
 
-//    @Test //User can book many tickets at a time
-//    public void TC13() {
-//        cf.navigateRailway();
-//        loginPage.changePage();
-//
-//        loginPage.login(cf.validLogEmail, cf.logPassword);
-//
-//        bookTicketPage.changePage();
-//        bookTicketPage.bookTicket(ticketsInfo);
-//
-//        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
-//        bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo);
-//    }
-//
-//    @Test //User can check price of ticket from Timetable
-//    public void TC14() {
-//        cf.navigateRailway();
-//        loginPage.changePage();
-//        loginPage.login(cf.validLogEmail, cf.logPassword);
-//
-//        timetablePage.changePage();
-//
-//        timetablePage.checkPrice(departStation, arriveStation);
-//
-//        timetablePage.checkPriceSeattypeTable();
-//
-//    }
-//
-//    @Test //User can book ticket from Timetable
-//    public void TC15() {
-//        cf.navigateRailway();
-//        loginPage.changePage();
-//        loginPage.login(cf.validLogEmail, cf.logPassword);
-//
-//        timetablePage.changePage();
-//
-//        timetablePage.bookTicketInTimetable(departStation, arriveStation);
-//
-//        bookTicketPage.checkInfoFromTimetable(departStation, arriveStation);
-//
-//        bookTicketPage.selectDepartDate(departDate);
-//        bookTicketPage.selectSeatType(seatType);
-//        bookTicketPage.selectAmount(ticketAmount);
-//        bookTicketPage.clickBookticketButton();
-//
-//        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
-//        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
-//    }
+    @Test //User can book many tickets at a time
+    public void TC13() {
+        cf.navigateRailway();
+        loginPage.changePage();
+        loginPage.login(validUser);
+
+        bookTicketPage.changePage();
+        bookTicketPage.bookTicket(ticketsInfo);
+
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo));
+
+    }
+
+    @Test //User can check price of ticket from Timetable
+    public void TC14() {
+        cf.navigateRailway();
+        loginPage.changePage();
+        loginPage.login(validUser);
+
+        timetablePage.changePage();
+        timetablePage.checkPrice(departStation, arriveStation);
+        Assert.assertTrue(timetablePage.checkPriceSeattypeTable());
+    }
+
+    @Test //User can book ticket from Timetable
+    public void TC15() {
+        cf.navigateRailway();
+        loginPage.changePage();
+        loginPage.login(validUser);
+
+        timetablePage.changePage();
+        timetablePage.bookTicketInTimetable(departStation, arriveStation);
+
+        bookTicketPage.checkInfoFromTimetable(departStation, arriveStation);
+
+        Assert.assertEquals(bookTicketPage.checkInfoFromTimetable(departStation, arriveStation) ,departStation+arriveStation);
+
+
+        bookTicketPage.selectDepartDate(departDate);
+        bookTicketPage.selectSeatType(seatType);
+        bookTicketPage.selectAmount(ticketAmount);
+        bookTicketPage.clickBookticketButton();
+
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
+    }
 
     @AfterClass
     public void tearDown() {

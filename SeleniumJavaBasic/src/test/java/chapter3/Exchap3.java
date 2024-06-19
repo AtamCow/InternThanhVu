@@ -7,6 +7,7 @@ import enums.Location;
 import enums.SeatType;
 import enums.TicketAmount;
 import models.Ticket;
+import models.User;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -22,6 +23,8 @@ public class Exchap3 extends BaseSetup {
     private GuerrillamailPage guerrillamailPage;
 
     private Ticket ticketInfo;
+
+    private User registerUser;
 
     String departDate = DepartDate.DAY_25.getDate();
     String departStation = Location.DA_NANG.getLocation();
@@ -41,6 +44,8 @@ public class Exchap3 extends BaseSetup {
 
         ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
 
+        registerUser = new User(cf.reEmail, cf.logPassword, cf.rePid);
+
     }
 
     @Test
@@ -49,7 +54,7 @@ public class Exchap3 extends BaseSetup {
 
         registerPage.changePage();
 
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
 
         cf.navigateQuerrilMail();
 

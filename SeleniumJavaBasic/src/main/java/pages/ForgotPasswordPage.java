@@ -27,6 +27,4 @@ public class ForgotPasswordPage {
         emailInput.sendKeys(email);
         sendButton.click();
     }
-
-
 }

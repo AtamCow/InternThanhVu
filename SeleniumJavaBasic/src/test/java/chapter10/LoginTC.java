@@ -3,6 +3,7 @@ package chapter10;
 import base.BaseSetup;
 import config.ConfigTest;
 import models.User;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -49,10 +50,9 @@ public class LoginTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-
         loginPage.login(validUser);
 
-        homePage.checkWelcomeMessage(cf.validLogEmail);
+        Assert.assertEquals(String.format("Welcome %s", cf.validLogEmail), homePage.checkWelcomeMessage());
     }
 
     @Test //User cannot login with blank "Username" textbox
@@ -61,12 +61,10 @@ public class LoginTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        user.setEmail("");
+        loginPage.login(blankEmailUser);
 
-        loginPage.login(validUser);
-
-        loginPage.checkErrorMessage(cf.messageErrorLoginform);
-        loginPage.checkLoginYet();
+        Assert.assertEquals(cf.messageErrorLoginform, loginPage.checkErrorMessage());
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
     }
 
     @Test //User cannot log into Railway with invalid password
@@ -75,9 +73,9 @@ public class LoginTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(blankPassUser);
+        loginPage.login(invalidPassUser);
 
-        loginPage.checkErrorMessage(cf.messageErrorLoginform);
+        Assert.assertEquals(cf.messageErrorLoginform, loginPage.checkErrorMessage());
     }
 
     @Test //System shows message when user enters wrong password many times
@@ -89,10 +87,11 @@ public class LoginTC extends BaseSetup {
 
         for (int i = 0; i < 4; i++) {
             loginPage.login(invalidPassUser);
-            loginPage.checkErrorMessage(cf.messageInvalidLoginform);
+            Assert.assertEquals(cf.messageInvalidLoginform, loginPage.checkErrorMessage());
         }
-        loginPage.checkLoginYet();
-        loginPage.checkExistMessage(cf.messageWarningLoginform);
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
+        Assert.assertTrue(loginPage.checkExistMessage(cf.messageWarningLoginform), "Could not find message");
+
     }
 
     @Test //User can't login with an account hasn't been activated
@@ -103,13 +102,12 @@ public class LoginTC extends BaseSetup {
         registerPage.changePage();
         registerPage.register(registerUser);
 
-
         // Login
         loginPage.changePage();
         loginPage.login(inactiveUser);
 
-        loginPage.checkLoginYet();
-        loginPage.checkErrorMessage(cf.messageInvalidLoginform);
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
+        Assert.assertEquals(cf.messageInvalidLoginform, loginPage.checkErrorMessage());
     }
 
     @AfterClass

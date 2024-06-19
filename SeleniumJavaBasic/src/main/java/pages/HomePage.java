@@ -22,10 +22,8 @@ public class HomePage {
         return recordMessage;
     }
 
-    public void register() {
+    public WebElement register() {
         WebElement createAccount = driver.findElement(By.xpath(createAccountLink));
-        Assert.assertNotNull(createAccount);
-        Assert.assertEquals(createAccount.getText(), creataAccountText);
-        createAccount.click();
+        return createAccount;
     }
 }

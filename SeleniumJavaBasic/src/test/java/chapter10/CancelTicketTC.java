@@ -7,8 +7,8 @@ import enums.Location;
 import enums.SeatType;
 import enums.TicketAmount;
 import models.Ticket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import models.User;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -22,6 +22,7 @@ public class CancelTicketTC extends BaseSetup {
     private MyTicketPage myTicketPage;
 
     private Ticket ticketInfo;
+    private User validUser;
 
     String departDate = DepartDate.DAY_25.getDate();
     String departStation = Location.DA_NANG.getLocation();
@@ -39,19 +40,21 @@ public class CancelTicketTC extends BaseSetup {
 
         ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
 
+        validUser = new User(cf.validLogEmail, cf.logPassword);
     }
 
     @Test //User can cancel a ticket
     public void TC16() {
         cf.navigateRailway();
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         bookTicketPage.changePage();
         bookTicketPage.bookTicket(ticketInfo);
 
         myTicketPage.changePage();
-        myTicketPage.cancelTicket(departStation, arriveStation, seatType, departDate, ticketAmount);
+        myTicketPage.cancelTicket(ticketInfo);
+        Assert.assertTrue(myTicketPage.checkTicketCanceled(ticketInfo), "Ticket is not deleted");
     }
 
     @AfterClass

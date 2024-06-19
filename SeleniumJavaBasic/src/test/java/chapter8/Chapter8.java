@@ -8,6 +8,7 @@ import enums.SeatType;
 import enums.TicketAmount;
 import models.Ticket;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -61,8 +62,8 @@ public class Chapter8 extends BaseSetup {
 
         bookTicketPage.bookTicket(ticketInfo);
 
-        bookTicketSuccessfulPage.checkBookedSuccessfulMessage(cf.bookSuccessfullMessage);
-        bookTicketSuccessfulPage.checkTicketInfo(ticketInfo);
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
     }
 
     @AfterClass
