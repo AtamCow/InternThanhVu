@@ -1,10 +1,11 @@
 .idea/
 target/
 allure-results/
-ExtentReports/
+
 InternThanhVu.iml
 Chap3.iml
 
 !.gitignore
 !*.xml
 !source/
+!ExtentReports\
