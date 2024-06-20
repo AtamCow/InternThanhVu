@@ -2,10 +2,8 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import enums.DepartDate;
 import enums.Location;
 import enums.SeatType;
-import enums.TicketAmount;
 import models.Ticket;
 //import org.junit.*;
 import models.User;
@@ -15,25 +13,24 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.*;
 
-import org.testng.asserts.SoftAssert;
-
 
 public class BookTicketTC extends BaseSetup {
     private ConfigTest cf;
 
     private LoginPage loginPage;
+    private PageBase pageBase;
     private TimetablePage timetablePage;
     private BookTicketPage bookTicketPage;
     private BookTicketSuccessfulPage bookTicketSuccessfulPage;
 
     private User validUser;
 
-    String departDate = DepartDate.DAY_25.getDate();
+    String departDate = "25";
     String departStation = Location.DA_NANG.getLocation();
     String arriveStation = Location.SAI_GON.getLocation();
     String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
-    String ticketAmount = TicketAmount.ONE.getAmount();
-    String ticketAmounts = TicketAmount.TWO.getAmount();
+    String ticketAmount = "1";
+    String ticketAmounts = "2";
 
     private Ticket ticketInfo;
     private Ticket ticketsInfo;
@@ -42,6 +39,7 @@ public class BookTicketTC extends BaseSetup {
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
+        pageBase = new PageBase(getDriver());
         loginPage = new LoginPage(getDriver());
         timetablePage = new TimetablePage(getDriver());
         bookTicketPage = new BookTicketPage(getDriver());
@@ -54,7 +52,7 @@ public class BookTicketTC extends BaseSetup {
 
     }
 
-    @Test //User can book 1 ticket at a time
+    @Test(description = "User can book 1 ticket at a time")
     public void TC12() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -65,9 +63,10 @@ public class BookTicketTC extends BaseSetup {
 
         Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
         Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
+        pageBase.logOut();
     }
 
-    @Test //User can book many tickets at a time
+    @Test(description = "User can book many tickets at a time")
     public void TC13() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -79,9 +78,10 @@ public class BookTicketTC extends BaseSetup {
         Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
         Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo));
 
+        pageBase.logOut();
     }
 
-    @Test //User can check price of ticket from Timetable
+    @Test(description = "User can check price of ticket from Timetable")
     public void TC14() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -90,9 +90,10 @@ public class BookTicketTC extends BaseSetup {
         timetablePage.changePage();
         timetablePage.checkPrice(departStation, arriveStation);
         Assert.assertTrue(timetablePage.checkPriceSeattypeTable());
+        pageBase.logOut();
     }
 
-    @Test //User can book ticket from Timetable
+    @Test(description = "User can book ticket from Timetable")
     public void TC15() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -113,6 +114,7 @@ public class BookTicketTC extends BaseSetup {
 
         Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
         Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
+        pageBase.logOut();
     }
 
     @AfterClass

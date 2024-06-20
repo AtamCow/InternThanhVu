@@ -1,13 +1,10 @@
-# Bỏ qua tất cả các file và thư mục
 .idea/
 target/
+allure-results/
+ExtentReports/
+InternThanhVu.iml
+Chap3.iml
 
-# Không bỏ qua file .gitignore
 !.gitignore
-
-# Không bỏ qua các file .xml
 !*.xml
-.iml
-
-# Không bỏ qua thư mục source và tất cả nội dung bên trong
 !source/

@@ -11,6 +11,7 @@ import pages.*;
 
 public class LoginTC extends BaseSetup {
     private ConfigTest cf;
+    private PageBase pageBase;
     private LoginPage loginPage;
     private FAQPage faqPage;
     private HomePage homePage;
@@ -29,6 +30,7 @@ public class LoginTC extends BaseSetup {
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
+        pageBase = new PageBase(getDriver());
         loginPage = new LoginPage(getDriver());
         faqPage = new FAQPage(getDriver());
         homePage = new HomePage(getDriver());
@@ -53,6 +55,7 @@ public class LoginTC extends BaseSetup {
         loginPage.login(validUser);
 
         Assert.assertEquals(String.format("Welcome %s", cf.validLogEmail), homePage.checkWelcomeMessage());
+        pageBase.logOut();
     }
 
     @Test //User cannot login with blank "Username" textbox

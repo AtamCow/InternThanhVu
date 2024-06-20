@@ -1,5 +1,10 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="Selenium Test Suite">
+
+    <listeners>
+        <listener class-name="utils.listeners.ReportListener"></listener>
+    </listeners>
+
     <test name="Selenium Tests">
         <classes>
             <!-- Thay 'com.example.tests.YourTestClass' bằng tên class của bạn -->

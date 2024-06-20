@@ -24,6 +24,8 @@ public class ConfigTest {
     public String invalidPassword = "12341234";
     public String rePid = "12341234";
 
+    public String departDate = "25";
+
     public String bookSuccessfullMessage = "Ticket booked successfully!";
 
     // Home page
@@ -52,6 +54,10 @@ public class ConfigTest {
 
     public void navigateQuerrilMail() {
         driver.navigate().to("https://www.guerrillamail.com/inbox");
+    }
+
+    public void refreshPage() {
+        driver.navigate().refresh();
     }
 
 

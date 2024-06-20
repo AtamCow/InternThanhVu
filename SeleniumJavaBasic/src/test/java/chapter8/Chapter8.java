@@ -2,10 +2,8 @@ package chapter8;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import enums.DepartDate;
 import enums.Location;
 import enums.SeatType;
-import enums.TicketAmount;
 import models.Ticket;
 
 import org.testng.Assert;
@@ -26,11 +24,11 @@ public class Chapter8 extends BaseSetup {
 
     private Ticket ticketInfo;
 
-    String departDate = DepartDate.DAY_25.getDate();
+    String departDate = "25";
     String departStation = Location.DA_NANG.getLocation();
     String arriveStation = Location.SAI_GON.getLocation();
     String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
-    String ticketAmount = TicketAmount.ONE.getAmount();
+    String ticketAmount = "1";
 
     @BeforeClass
     public void setUp() {

@@ -2,17 +2,18 @@ package chapter3;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import enums.DepartDate;
 import enums.Location;
 import enums.SeatType;
-import enums.TicketAmount;
 import models.Ticket;
 import models.User;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.*;
+import utils.listeners.ReportListener;
 
+@Listeners(ReportListener.class)
 
 public class Exchap3 extends BaseSetup {
     private ConfigTest cf;
@@ -26,11 +27,11 @@ public class Exchap3 extends BaseSetup {
 
     private User registerUser;
 
-    String departDate = DepartDate.DAY_25.getDate();
+    String departDate = "25";
     String departStation = Location.DA_NANG.getLocation();
     String arriveStation = Location.SAI_GON.getLocation();
     String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
-    String ticketAmount = TicketAmount.ONE.getAmount();
+    String ticketAmount = "1";
 
     @BeforeClass
     public void setUp() {

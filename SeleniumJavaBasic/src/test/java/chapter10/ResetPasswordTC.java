@@ -4,6 +4,7 @@ import base.BaseSetup;
 import config.ConfigTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -29,7 +30,7 @@ public class ResetPasswordTC extends BaseSetup {
         forgotPasswordPage = new ForgotPasswordPage(getDriver());
     }
 
-    @Test //User create and activate account
+    @Test(description = "User create and activate account")
     public void TC10() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -43,12 +44,13 @@ public class ResetPasswordTC extends BaseSetup {
 
         pageBase.changeToTab(1);
 
-        changePasswordPage.checkPasswordChangeFormShown();
+        Assert.assertTrue(changePasswordPage.checkPasswordChangeFormShown(), "Reset Password token do not display");
         changePasswordPage.enterNewPassword(cf.logPassword, cf.logPassword);
-        changePasswordPage.checkWarningSamePassMessageShown();
+        Assert.assertTrue(changePasswordPage.checkWarningSamePassMessageShown(), "Message did not appear as expected");
+        pageBase.logOut();
     }
 
-    @Test //Reset password shows error if the new password and confirm password doesn't match
+    @Test(description = "Reset password shows error if the new password and confirm password doesn't match")
     public void TC11() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -62,10 +64,12 @@ public class ResetPasswordTC extends BaseSetup {
 
         pageBase.changeToTab(1);
 
-        changePasswordPage.checkPasswordChangeFormShown();
+        Assert.assertTrue(changePasswordPage.checkPasswordChangeFormShown(), "Reset Password token do not display");
+
         changePasswordPage.enterNewPassword(cf.logPassword, cf.invalidPassword);
-        changePasswordPage.checkErrorMessageAbove(cf.messageErrorAbove);
-        changePasswordPage.checkErrorMessageNextto(cf.messageErrorNexttoConfirmPass, "confirmPassword");
+
+        Assert.assertTrue(changePasswordPage.checkErrorMessageAbove(cf.messageErrorAbove));
+        Assert.assertTrue(changePasswordPage.checkErrorMessageNextto(cf.messageErrorNexttoConfirmPass, "confirmPassword"),"Error message display out of the field");
     }
 
     @AfterClass

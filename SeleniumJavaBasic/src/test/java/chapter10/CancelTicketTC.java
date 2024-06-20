@@ -2,10 +2,8 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import enums.DepartDate;
 import enums.Location;
 import enums.SeatType;
-import enums.TicketAmount;
 import models.Ticket;
 import models.User;
 import org.testng.Assert;
@@ -24,11 +22,11 @@ public class CancelTicketTC extends BaseSetup {
     private Ticket ticketInfo;
     private User validUser;
 
-    String departDate = DepartDate.DAY_25.getDate();
+    String departDate = "25";
     String departStation = Location.DA_NANG.getLocation();
     String arriveStation = Location.SAI_GON.getLocation();
     String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
-    String ticketAmount = TicketAmount.ONE.getAmount();
+    String ticketAmount = "1";
 
     @BeforeClass
     public void setUp() {
