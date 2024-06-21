@@ -2,6 +2,7 @@ package config;
 
 import org.openqa.selenium.WebDriver;
 
+
 public class ConfigTest {
     private WebDriver driver;
 
@@ -13,21 +14,17 @@ public class ConfigTest {
     public String idEmail = "vcasdfe";
     public String hostEmail = "grr.la";
     public String validLogEmail = idEmail + "@" + hostEmail;
+
     public String reIdEmail = "asfgrdcvsdw";
     public String reHostEmail = "grr.la";
     public String reEmail = reIdEmail + "@" + reHostEmail;
+
     public String invalidEmail = "vfsdfrd@cijd.dfe";
     public String logPassword = "1234qwer";
     public String invalidPassword = "12341234";
     public String rePid = "12341234";
 
-    // Ticket informations
     public String departDate = "25";
-    public String departFrom = "Đà Nẵng";
-    public String arriveAt = "Sài Gòn";
-    public String seatType = "Soft seat";
-    public String ticketAmount = "1";
-    public String ticketAmounts = "1";
 
     public String bookSuccessfullMessage = "Ticket booked successfully!";
 
@@ -57,6 +54,10 @@ public class ConfigTest {
 
     public void navigateQuerrilMail() {
         driver.navigate().to("https://www.guerrillamail.com/inbox");
+    }
+
+    public void refreshPage() {
+        driver.navigate().refresh();
     }
 
 

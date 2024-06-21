@@ -1,11 +1,13 @@
 package pages;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -15,6 +17,8 @@ public class PageBase {
     public PageBase(WebDriver driver){
         this.driver = driver;
     }
+
+    private String tabPath = "//div[@id='menu']//a//span[text()='%s']";
 
     public void scrollView(Object element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -43,17 +47,25 @@ public class PageBase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    }
+
+    public WebElement wait(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     public boolean checkTabExisted(String tabName) {
-        int tabExist = driver.findElements(By.linkText(tabName)).size();
+        int tabExist = driver.findElements(By.xpath(String.format(tabPath, tabName))).size();
         if (tabExist == 0)
             return false;
         else
             return true;
     }
 
-    public void checkCurrentPage(String currentPage) {
+    public boolean checkCurrentPage(String currentPage) {
         WebElement ulElement = driver.findElement(By.xpath("//div[@id='menu']//ul"));
         java.util.List<WebElement> listItems = ulElement.findElements(By.xpath("//div[@id='menu']//ul//li"));
 
@@ -69,13 +81,11 @@ public class PageBase {
                 }
             }
         }
-        Assert.assertFalse(check);
+        return check;
     }
 
     public void logOut() {
         By tabNameChange = By.xpath("//div[@id='menu']//span[text()='Log out']");
         driver.findElement(tabNameChange).click();
     }
-
-
 }

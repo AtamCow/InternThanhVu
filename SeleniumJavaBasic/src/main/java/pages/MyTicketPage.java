@@ -1,6 +1,6 @@
 package pages;
 
-import org.junit.Assert;
+import models.Ticket;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -26,29 +26,33 @@ public class MyTicketPage {
     }
 
     public String trTicketCancel = "//div[@id='content']//table[@class='MyTable']//tr[td[text()='%s'] and td[text()='%s'] and td[text()='%s'] and td[text()='%s'] and td[text()='%s']]";
-
     public String buttonFirstTicketCancel = "//div[@id='content']//table[@class='MyTable']//tr[td[text()='%s'] and td[text()='%s'] and td[text()='%s'] and td[text()='%s'] and td[text()='%s']][1]//input";
 
-    public void cancelTicket(String departstation, String arrivestation, String seattype, String departdate, String amount) {
+    private int ticketNum;
+    public void cancelTicket(Ticket ticket) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-        String checkDate = LocalDate.now().plusDays(Integer.parseInt(departdate)).format(formatter);
+        String checkDate = LocalDate.now().plusDays(Integer.parseInt(ticket.getDepartDate())).format(formatter);
 
         // Get ticket number has the same information
-        List<WebElement> ticketBefore = driver.findElements(By.xpath(String.format(trTicketCancel, departstation, arrivestation, seattype, checkDate, amount)));
-        int ticketBeforeNum = ticketBefore.size();
+        List<WebElement> ticketBefore = driver.findElements(By.xpath(String.format(trTicketCancel, ticket.getDepartStation(), ticket.getDepartDate(), ticket.getSeatType(), checkDate, ticket.getTicketAmount())));
+        ticketNum = ticketBefore.size();
 
-        WebElement cancelButton = driver.findElement(By.xpath(String.format(buttonFirstTicketCancel, departstation, arrivestation, seattype, checkDate, amount)));
+        WebElement cancelButton = driver.findElement(By.xpath(String.format(buttonFirstTicketCancel, ticket.getDepartStation(), ticket.getDepartDate(), ticket.getSeatType(), checkDate, ticket.getTicketAmount())));
         cancelButton.click();
 
         // Wait for Alert item
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
+    }
 
-        List<WebElement> ticketAfter = driver.findElements(By.xpath(String.format(trTicketCancel, departstation, arrivestation, seattype, checkDate, amount)));
-        int ticketAfterNum = ticketAfter.size();
+    public boolean checkTicketCanceled(Ticket ticket) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        String checkDate = LocalDate.now().plusDays(Integer.parseInt(ticket.getDepartDate())).format(formatter);
 
-        Assert.assertEquals(ticketAfterNum, ticketBeforeNum - 1);
+        List<WebElement> ticketAfter = driver.findElements(By.xpath(String.format(trTicketCancel, ticket.getDepartStation(), ticket.getDepartDate(), ticket.getSeatType(), checkDate, ticket.getTicketAmount())));
+        boolean check = ticketAfter.size() == (ticketNum - 1);
 
+        return check;
     }
 }

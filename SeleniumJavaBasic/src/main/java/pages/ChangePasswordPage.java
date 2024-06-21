@@ -1,6 +1,5 @@
 package pages;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,15 +28,15 @@ public class ChangePasswordPage {
     By passwordChangeForm = By.xpath("//div[@id='content']//form");
 
 
-    public void checkPasswordChangeFormShown() {
+    public boolean checkPasswordChangeFormShown() {
         List<WebElement> changeForm = driver.findElements(By.xpath(passwordChangeFormText));
-        int changeFormNumbers = changeForm.size();
-        Assert.assertEquals(1, changeFormNumbers);
+        boolean changeFormExist = changeForm.size() == 1;
 
         WebElement inputElement = driver.findElement(By.xpath(passwordResetTokenpath));
         String inputValue = inputElement.getAttribute("value");
+        boolean inputValueExist = inputValue != null;
 
-        Assert.assertNotNull(inputValue,"Reset Password token do not display");
+        return changeFormExist && inputValueExist;
     }
 
     public void enterNewPassword(String newPassword, String confirmPassword) {
@@ -50,35 +49,37 @@ public class ChangePasswordPage {
         button.click();
     }
 
-    public void checkWarningSamePassMessageShown() {
+    public boolean checkWarningSamePassMessageShown() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format("//*[contains(text(),'%s')]", warningSamePassMessage))));
-
-        Assert.assertNotNull(message);
+        boolean messageExist = message != null;
 
         String actualMessage = message.getText();
+        boolean checkMessage = warningSamePassMessage.equals(actualMessage);
 
-        Assert.assertEquals(actualMessage, warningSamePassMessage, "Message did not appear as expected");
+        return messageExist && checkMessage;
     }
 
-    public void checkErrorMessageAbove(String expectedMessage) {
+    public boolean checkErrorMessageAbove(String expectedMessage) {
         WebElement errorMessageText = driver.findElement(errorMessageAbove);
         String recordMessage = errorMessageText.getText();
-        Assert.assertEquals(expectedMessage, recordMessage);
+        boolean checkMessage = expectedMessage.equals(recordMessage);
 
         WebElement form = driver.findElement(passwordChangeForm);
 
         int errorMessageY = errorMessageText.getLocation().getY();
         int formY = form.getLocation().getY();
 
-        Assert.assertTrue(errorMessageY < formY);
+        boolean position = errorMessageY < formY;
+
+        return position && checkMessage;
     }
 
-    public void checkErrorMessageNextto(String expectedMessage, String position) {
+    public boolean checkErrorMessageNextto(String expectedMessage, String position) {
         By errorMessageNextto = By.xpath(String.format(errorMessageLabelNextto, position));
         WebElement errorMessageText = driver.findElement(errorMessageNextto);
         String recordMessage = errorMessageText.getText();
-        Assert.assertEquals(expectedMessage, recordMessage);
+        boolean checkMessage = expectedMessage.equals(recordMessage);
 
         By confirmPassInput = By.xpath(String.format(confirmPasswordInputpath, position));
         WebElement input = driver.findElement(confirmPassInput);
@@ -86,6 +87,8 @@ public class ChangePasswordPage {
         int errorMessageY = errorMessageText.getLocation().getY();
         int inputY = input.getLocation().getY();
         int check = Math.abs(errorMessageY - inputY);
-        Assert.assertTrue("Error message display out of the field", check < 10);
+        boolean pos = check < 10;
+
+        return pos && checkMessage;
     }
 }

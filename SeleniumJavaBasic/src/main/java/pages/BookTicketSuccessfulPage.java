@@ -1,6 +1,6 @@
 package pages;
 
-import org.junit.Assert;
+import models.Ticket;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -23,50 +23,51 @@ public class BookTicketSuccessfulPage {
     private String tdDepartDate = "4";
     private String tdAmount = "7";
 
-    public void checkTicketInfo (String expectedMessage, String departstationExpected, String arrivestationExpected, String seattypeExpected, String departdateExpected, String amountExpected) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(departdateExpected)).format(formatter);
 
-        By h1Message = By.xpath(h1MessageXpath);
+
+    public boolean checkTicketInfo (Ticket ticket) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        String checkedDate = LocalDate.now().plusDays(Integer.parseInt(ticket.getDepartDate())).format(formatter);
+
         By departStation = By.xpath(String.format(tdInformation, tdDepartStation));
         By arriveStation = By.xpath(String.format(tdInformation,tdArriveStation));
         By seatType = By.xpath(String.format(tdInformation,tdseatType));
         By departDate = By.xpath(String.format(tdInformation,tdDepartDate));
         By amount = By.xpath(String.format(tdInformation,tdAmount));
 
-        String successMessage = driver.findElement(h1Message).getText();
         String departStationValue = driver.findElement(departStation).getText();
         String arriveStationValue = driver.findElement(arriveStation).getText();
         String seatTypeValue = driver.findElement(seatType).getText();
         String departDateValue = driver.findElement(departDate).getText();
         String amountValue = driver.findElement(amount).getText();
 
-        int checkValue = 0;
+        boolean checkValue = true;
 
-        if (!expectedMessage.equals(successMessage)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",successMessage, expectedMessage));
+        if (!ticket.getDepartStation().equals(departStationValue)) {
+            checkValue = false;
+            System.out.println(String.format("Record value: %s, Expected value: %s",departStationValue, ticket.getDepartStation()));
         }
-        if (!departstationExpected.equals(departStationValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",departStationValue, departstationExpected));
+        if (!ticket.getArriveAt().equals(arriveStationValue)) {
+            checkValue = false;
+            System.out.println(String.format("Record value: %s, Expected value: %s",arriveStationValue, ticket.getArriveAt()));
         }
-        if (!arrivestationExpected.equals(arriveStationValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",arriveStationValue, arrivestationExpected));
-        }
-        if (!seattypeExpected.equals(seatTypeValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",seatTypeValue, seattypeExpected));
+        if (!ticket.getSeatType().equals(seatTypeValue)) {
+            checkValue = false;
+            System.out.println(String.format("Record value: %s, Expected value: %s",seatTypeValue, ticket.getSeatType()));
         }
         if (!checkedDate.equals(departDateValue)) {
-            checkValue += 1;
+            checkValue = false;
             System.out.println(String.format("Record value: %s, Expected value: %s",departDateValue, checkedDate));
         }
-        if (!amountExpected.equals(amountValue)) {
-            checkValue += 1;
-            System.out.println(String.format("Record value: %s, Expected value: %s",amountValue, amountExpected));
+        if (!ticket.getTicketAmount().equals(amountValue)) {
+            checkValue = false;
+            System.out.println(String.format("Record value: %s, Expected value: %s",amountValue, ticket.getTicketAmount()));
         }
-        Assert.assertEquals(0, checkValue);
+        return checkValue;
+    }
+
+    public String checkBookedSuccessfulMessage() {
+        By h1Message = By.xpath(h1MessageXpath);
+        return driver.findElement(h1Message).getText();
     }
 }

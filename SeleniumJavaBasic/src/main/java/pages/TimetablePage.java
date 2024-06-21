@@ -1,6 +1,5 @@
 package pages;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,14 +36,14 @@ public class TimetablePage {
         checkPriceLink.click();
     }
 
-    public void checkPriceSeattypeTable() {
+    public boolean checkPriceSeattypeTable() {
         List<WebElement> rows = driver.findElements(By.xpath(tableSeattypeRows));
 
         List<WebElement> seatTypeCells = rows.get(1).findElements(By.xpath(".//td"));
         //List<WebElement> seatTypeCells = driver.findElements(By.xpath(tableSeattypeCell));
         List<WebElement> priceCells = rows.get(2).findElements(By.xpath(".//td"));
 
-        int found = 0;
+        boolean found = true;
 
         // Check all cells in first row
         for (int i = 0; i < seatTypeCells.size() ; i++) {
@@ -56,12 +55,12 @@ public class TimetablePage {
                 if (!priceCell.getText().trim().equals(seatTypePriceDNtoSG[i])) {
                     System.out.println(seatTypeCell.getText());
                     System.out.println(priceCell.getText());
-                    found += 1;
+                    found = false;
                 }
             }
-            else found += 1;
+            else found = false;
         }
-        Assert.assertEquals(0, found);
+        return found;
     }
 
     public void bookTicketInTimetable(String departFrom, String arriveAt) {
@@ -69,7 +68,4 @@ public class TimetablePage {
         pageBase.scrollView(bookTicketLink);
         bookTicketLink.click();
     }
-
-
-
 }

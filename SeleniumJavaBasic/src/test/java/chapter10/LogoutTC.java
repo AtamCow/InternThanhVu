@@ -2,9 +2,10 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import models.User;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import pages.*;
 
 public class LogoutTC extends BaseSetup {
@@ -14,13 +15,17 @@ public class LogoutTC extends BaseSetup {
     private FAQPage faqPage;
     private PageBase pageBase;
 
-    @Before
+    private User validUser;
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());
         faqPage = new FAQPage(getDriver());
         pageBase = new PageBase(getDriver());
+
+        validUser = new User(cf.validLogEmail, cf.logPassword);
     }
 
     @Test //User is redirected to Home page after logging out
@@ -29,7 +34,7 @@ public class LogoutTC extends BaseSetup {
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         faqPage.changePage();
         pageBase.logOut();
@@ -39,7 +44,7 @@ public class LogoutTC extends BaseSetup {
         pageBase.checkTabExisted("Log out");
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

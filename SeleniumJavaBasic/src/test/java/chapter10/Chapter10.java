@@ -2,9 +2,14 @@ package chapter10;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import org.junit.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import enums.*;
+import models.*;
+import org.testng.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.*;
 
 public class Chapter10 extends BaseSetup {
@@ -24,7 +29,27 @@ public class Chapter10 extends BaseSetup {
     private ForgotPasswordPage forgotPasswordPage;
     private MyTicketPage myTicketPage;
 
-    @Before
+    private SoftAssert softAssert;
+
+    private Ticket ticketInfo;
+    private Ticket ticketsInfo;
+
+    private User validUser;
+    private User blankEmailUser;
+    private User blankPassUser;
+    private User invalidPassUser;
+    private User registerUser;
+    private User inactiveUser;
+    private User registerBlankPassPidUser;
+
+    String departDate = "25";
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = "1";
+    String ticketAmounts = "2";
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf  = new ConfigTest(getDriver());
@@ -41,43 +66,57 @@ public class Chapter10 extends BaseSetup {
         changePasswordPage = new ChangePasswordPage(getDriver());
         myTicketPage = new MyTicketPage(getDriver());
         forgotPasswordPage = new ForgotPasswordPage(getDriver());
+
+        ticketInfo = new Ticket(cf.departDate, departStation, arriveStation, seatType, ticketAmount);
+        ticketsInfo = new Ticket(cf.departDate, departStation, arriveStation, seatType, ticketAmounts);
+
+
+        validUser = new User(cf.validLogEmail, cf.logPassword);
+        blankEmailUser = new User("", cf.logPassword);
+        blankPassUser = new User(cf.validLogEmail, "");
+        invalidPassUser = new User(cf.validLogEmail, cf.invalidPassword);
+
+        registerUser = new User(cf.reEmail, cf.logPassword, cf.rePid);
+        inactiveUser = new User(cf.reEmail, cf.logPassword);
+        registerBlankPassPidUser = new User(cf.reEmail, "", "");
+
     }
 
-    @Test //User can log into Railway with valid username and password
+    @Test(description = "User can log into Railway with valid username and password")
     public void TC01() {
         cf.navigateRailway();
 
-        // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
-        homePage.checkWelcomeMessage(cf.validLogEmail);
+        Assert.assertEquals(String.format("Welcome %s", cf.validLogEmail), homePage.checkWelcomeMessage());
+        pageBase.logOut();
     }
 
-    @Test //User cannot login with blank "Username" textbox
+    @Test(description = "User cannot login with blank \"Username\" textbox")
     public void TC02() {
         cf.navigateRailway();
 
         // Login
         loginPage.changePage();
-        loginPage.login("", cf.logPassword);
+        loginPage.login(blankEmailUser);
 
-        loginPage.checkErrorMessage(cf.messageErrorLoginform);
-        loginPage.checkLoginYet();
+        Assert.assertEquals(cf.messageErrorLoginform, loginPage.checkErrorMessage());
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
     }
 
-    @Test //User cannot log into Railway with invalid password
+    @Test(description = "User cannot log into Railway with invalid password")
     public void TC03() {
         cf.navigateRailway();
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.invalidPassword);
+        loginPage.login(invalidPassUser);
 
-        loginPage.checkErrorMessage(cf.messageErrorLoginform);
+        Assert.assertEquals(cf.messageErrorLoginform, loginPage.checkErrorMessage());
     }
 
-    @Test //System shows message when user enters wrong password many times
+    @Test(description = "System shows message when user enters wrong password many times")
     public void TC04() {
         cf.navigateRailway();
 
@@ -85,78 +124,84 @@ public class Chapter10 extends BaseSetup {
         loginPage.changePage();
 
         for (int i = 0; i < 4; i++) {
-            loginPage.login(cf.validLogEmail, cf.invalidPassword);
-            loginPage.checkErrorMessage(cf.messageInvalidLoginform);
+            loginPage.login(invalidPassUser);
+            Assert.assertEquals(cf.messageInvalidLoginform, loginPage.checkErrorMessage());
         }
-        loginPage.checkLoginYet();
-        loginPage.checkExistMessage(cf.messageWarningLoginform);
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
+        Assert.assertTrue(loginPage.checkExistMessage(cf.messageWarningLoginform), "Could not find message");
 
     }
 
-    @Test //User can't login with an account hasn't been activated
+    @Test(description = "User can't login with an account hasn't been activated")
     public void TC05() {
         cf.navigateRailway();
 
         //Register
         registerPage.changePage();
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(inactiveUser);
 
-        loginPage.checkLoginYet();
-        loginPage.checkErrorMessage(cf.messageInvalidLoginform);
+        Assert.assertTrue(loginPage.checkLoginYet(), "Not Login yet");
+        Assert.assertEquals(cf.messageInvalidLoginform, loginPage.checkErrorMessage());
     }
 
-    @Test //User is redirected to Home page after logging out
+    @Test(description = "User is redirected to Home page after logging out")
     public void TC06() {
         cf.navigateRailway();
 
         // Login
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         faqPage.changePage();
         pageBase.logOut();
 
         pageBase.waitMiliSec(1000);
-        pageBase.checkCurrentPage("Home");
-        pageBase.checkTabExisted("Log out");
+        Assert.assertTrue(pageBase.checkCurrentPage("Home"), "Home page do not display");
+        Assert.assertFalse(pageBase.checkTabExisted("Log out"), "Log out tab is appeared");
     }
 
-    @Test //User can't create account with an already in-use email
+    @Test(description = "User can't create account with an already in-use email")
     public void TC07() {
         cf.navigateRailway();
 
-        // Login
         registerPage.changePage();
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
 
-        registerPage.checkErrorMessageAbove(cf.messageErrorRegisterWithInvalidEmail);
+        Assert.assertTrue(registerPage.checkErrorMessageAbove(cf.messageErrorRegisterWithInvalidEmail));
+        pageBase.logOut();
     }
 
-    @Test //User can't create account while password and PID fields are empty
+    @Test(description = "User can't create account while password and PID fields are empty")
     public void TC08() {
         cf.navigateRailway();
 
-        // Login
         registerPage.changePage();
-        registerPage.register(cf.validLogEmail, "", "");
+        registerPage.register(registerBlankPassPidUser);
 
-        registerPage.checkErrorMessageAbove(cf.messageErrorRegister);
-        registerPage.checkErrorMessageNextto(cf.messageInvalidPasswordLenghtRegister, "password");
-        registerPage.checkErrorMessageNextto(cf.messageInvalidPidlenghtRegister, "pid");
+        Assert.assertTrue(registerPage.checkErrorMessageAbove(cf.messageErrorRegisterWithInvalidEmail));
+
+        Assert.assertTrue(registerPage.checkErrorMessageNextto(cf.messageInvalidPasswordLenghtRegister, "password"),"Error message display out of the field");
+        Assert.assertTrue(registerPage.checkErrorMessageNextto(cf.messageInvalidPidlenghtRegister, "pid"),"Error message display out of the field");
+        pageBase.logOut();
+
     }
 
-    @Test //User create and activate account
+    @Test(description = "User create and activate account")
     public void TC09() {
         cf.navigateRailway();
 
-        homePage.register();
+        Assert.assertNotNull(homePage.register());
+        Assert.assertEquals(homePage.register().getText(), "create an account");
+        homePage.register().click();
+
+
         pageBase.checkCurrentPage("Register");
-        registerPage.register(cf.reEmail, cf.logPassword, cf.rePid);
-        registerPage.checkTitle(cf.messageTitleAfterRegister);
+        registerPage.register(registerUser);
+        Assert.assertTrue(registerPage.checkTitle(cf.messageTitleAfterRegister), "The title message is not shown");
 
         cf.navigateQuerrilMail();
         int originNumTabs = pageBase.getTabNumber();
@@ -167,10 +212,11 @@ public class Chapter10 extends BaseSetup {
         Assert.assertEquals(newNumTabs, originNumTabs + 1);
         pageBase.changeToTab(1);
 
-        registerPage.checkConfirmed(cf.messageConfirmedRegister);
+        Assert.assertTrue(registerPage.checkConfirmed(cf.messageConfirmedRegister), "The confirm message is not shown");
+        pageBase.logOut();
     }
 
-    @Test //User create and activate account
+    @Test(description = "User create and activate account")
     public void TC10() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -184,12 +230,13 @@ public class Chapter10 extends BaseSetup {
 
         pageBase.changeToTab(1);
 
-        changePasswordPage.checkPasswordChangeFormShown();
+        Assert.assertTrue(changePasswordPage.checkPasswordChangeFormShown(), "Reset Password token do not display");
         changePasswordPage.enterNewPassword(cf.logPassword, cf.logPassword);
-        changePasswordPage.checkWarningSamePassMessageShown();
+        Assert.assertTrue(changePasswordPage.checkWarningSamePassMessageShown(), "Message did not appear as expected");
+        pageBase.logOut();
     }
 
-    @Test //Reset password shows error if the new password and confirm password doesn't match
+    @Test(description = "Reset password shows error if the new password and confirm password doesn't match")
     public void TC11() {
         cf.navigateRailway();
         loginPage.changePage();
@@ -203,87 +250,100 @@ public class Chapter10 extends BaseSetup {
 
         pageBase.changeToTab(1);
 
-        changePasswordPage.checkPasswordChangeFormShown();
+        Assert.assertTrue(changePasswordPage.checkPasswordChangeFormShown(), "Reset Password token do not display");
+
         changePasswordPage.enterNewPassword(cf.logPassword, cf.invalidPassword);
-        changePasswordPage.checkErrorMessageAbove(cf.messageErrorAbove);
-        changePasswordPage.checkErrorMessageNextto(cf.messageErrorNexttoConfirmPass, "confirmPassword");
+
+        Assert.assertTrue(changePasswordPage.checkErrorMessageAbove(cf.messageErrorAbove));
+        Assert.assertTrue(changePasswordPage.checkErrorMessageNextto(cf.messageErrorNexttoConfirmPass, "confirmPassword"),"Error message display out of the field");
     }
 
-    @Test //User can book 1 ticket at a time
+    @Test(description = "User can book 1 ticket at a time")
     public void TC12() {
         cf.navigateRailway();
         loginPage.changePage();
-
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         bookTicketPage.changePage();
+        bookTicketPage.bookTicket(ticketInfo);
 
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
-
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
+        pageBase.logOut();
     }
 
-    @Test //User can book many tickets at a time
+    @Test(description = "User can book many tickets at a time")
     public void TC13() {
         cf.navigateRailway();
         loginPage.changePage();
-
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         bookTicketPage.changePage();
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmounts);
+        bookTicketPage.bookTicket(ticketsInfo);
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmounts  );
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketsInfo));
+
+        pageBase.logOut();
     }
 
-    @Test //User can check price of ticket from Timetable
+    @Test(description = "User can check price of ticket from Timetable")
     public void TC14() {
         cf.navigateRailway();
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         timetablePage.changePage();
-
-        timetablePage.checkPrice(cf.departFrom, cf.arriveAt);
-
-        timetablePage.checkPriceSeattypeTable();
-
+        timetablePage.checkPrice(departStation, arriveStation);
+        Assert.assertTrue(timetablePage.checkPriceSeattypeTable());
+        pageBase.logOut();
     }
 
-    @Test //User can book ticket from Timetable
+    @Test(description = "User can book ticket from Timetable")
     public void TC15() {
         cf.navigateRailway();
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         timetablePage.changePage();
+        timetablePage.bookTicketInTimetable(departStation, arriveStation);
 
-        timetablePage.bookTicketInTimetable(cf.departFrom, cf.arriveAt);
+        bookTicketPage.checkInfoFromTimetable(departStation, arriveStation);
 
-        bookTicketPage.checkInfoFromTimetable(cf.departFrom, cf.arriveAt);
+        Assert.assertEquals(bookTicketPage.checkInfoFromTimetable(departStation, arriveStation) ,departStation+arriveStation);
 
-        bookTicketPage.selectDepartDate(cf.departDate);
-        bookTicketPage.selectSeatType(cf.seatType);
-        bookTicketPage.selectAmount(cf.ticketAmount);
+
+        bookTicketPage.selectDepartDate(departDate);
+        bookTicketPage.selectSeatType(seatType);
+        bookTicketPage.selectAmount(ticketAmount);
         bookTicketPage.clickBookticketButton();
 
-        bookTicketSuccessfulPage.checkTicketInfo(cf.bookSuccessfullMessage, cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount  );
+        Assert.assertEquals(cf.bookSuccessfullMessage, bookTicketSuccessfulPage.checkBookedSuccessfulMessage());
+        Assert.assertTrue(bookTicketSuccessfulPage.checkTicketInfo(ticketInfo));
+        pageBase.logOut();
     }
 
-    @Test //User can cancel a ticket
+    @Test(description = "User can cancel a ticket")
     public void TC16() {
         cf.navigateRailway();
         loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
+        loginPage.login(validUser);
 
         bookTicketPage.changePage();
-        bookTicketPage.bookTicket(cf.departDate, cf.departFrom, cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
 
         myTicketPage.changePage();
-        myTicketPage.cancelTicket(cf.departFrom, cf.arriveAt, cf.seatType, cf.departDate, cf.ticketAmount);
+        myTicketPage.cancelTicket(ticketInfo);
+        Assert.assertTrue(myTicketPage.checkTicketCanceled(ticketInfo), "Ticket is not deleted");
+        pageBase.logOut();
     }
 
-    @After
+    @AfterTest
+    public void close() {
+        pageBase.logOut();
+    }
+
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

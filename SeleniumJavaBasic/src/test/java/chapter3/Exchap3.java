@@ -2,11 +2,18 @@ package chapter3;
 
 import base.BaseSetup;
 import config.ConfigTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import enums.Location;
+import enums.SeatType;
+import models.Ticket;
+import models.User;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 import pages.*;
+import utils.listeners.ReportListener;
 
+@Listeners(ReportListener.class)
 
 public class Exchap3 extends BaseSetup {
     private ConfigTest cf;
@@ -16,7 +23,17 @@ public class Exchap3 extends BaseSetup {
     private RegisterPage registerPage;
     private GuerrillamailPage guerrillamailPage;
 
-    @Before
+    private Ticket ticketInfo;
+
+    private User registerUser;
+
+    String departDate = "25";
+    String departStation = Location.DA_NANG.getLocation();
+    String arriveStation = Location.SAI_GON.getLocation();
+    String seatType = SeatType.SOFT_SEAT_AC.getSeatType();
+    String ticketAmount = "1";
+
+    @BeforeClass
     public void setUp() {
         super.setup();
         cf = new ConfigTest(getDriver());
@@ -25,6 +42,11 @@ public class Exchap3 extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         guerrillamailPage = new GuerrillamailPage(getDriver());
         pageBase = new PageBase(getDriver());
+
+        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
+
+        registerUser = new User(cf.reEmail, cf.logPassword, cf.rePid);
+
     }
 
     @Test
@@ -33,7 +55,7 @@ public class Exchap3 extends BaseSetup {
 
         registerPage.changePage();
 
-        registerPage.register(cf.validLogEmail, cf.logPassword, cf.rePid);
+        registerPage.register(registerUser);
 
         cf.navigateQuerrilMail();
 
@@ -49,10 +71,10 @@ public class Exchap3 extends BaseSetup {
 
         bookTicketPage.changePage();
 
-        bookTicketPage.bookTicket(cf.departDate, "Phan Thiết", cf.arriveAt, cf.seatType, cf.ticketAmount);
+        bookTicketPage.bookTicket(ticketInfo);
     }
 
-    @After
+    @AfterClass
     public void tearDown() {
         super.tearDown();
     }

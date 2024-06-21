@@ -1,12 +1,10 @@
 package pages;
 
-import org.junit.Assert;
-import org.junit.Before;
+import models.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import pages.*;
 
 public class BookTicketPage {
     private WebDriver driver;
@@ -29,15 +27,15 @@ public class BookTicketPage {
     private String ticketamountSelect = "//select[@name='TicketAmount']//option[@value='%s']";
     private String bookTicketButton = "//div[@id='content']//form//input[@value='Book ticket']";
 
-    public void bookTicket(String departdate, String departfrom, String arriverat, String seattype, String ticketamount) {
-        selectDepartDate(departdate);
-        selectDepartStation(departfrom);
+    public void bookTicket(Ticket ticket) {
+        selectDepartDate(ticket.getDepartDate());
+        selectDepartStation(ticket.getDepartStation());
 
-        pageBase.waitMiliSec(2000);
+        BookTicketPage untils = new BookTicketPage(driver);
 
-        selectArriveStation(arriverat);
-        selectSeatType(seattype);
-        selectAmount(ticketamount);
+        selectArriveStation(ticket.getArriveAt());
+        selectSeatType(ticket.getSeatType());
+        selectAmount(ticket.getTicketAmount());
 
         clickBookticketButton();
     }
@@ -55,8 +53,10 @@ public class BookTicketPage {
 
     public void selectArriveStation(String arriveStation) {
         By ticketArriveStationSelect = By.xpath(String.format(arriverAtSelect, arriveStation));
-        driver.findElement(ticketArriveStationSelect).click();
+        WebElement arriveAt = driver.findElement(ticketArriveStationSelect);
 
+        BookTicketPage untils = new BookTicketPage(driver);
+        untils.pageBase.wait(arriveAt).click();
     }
 
     public void selectSeatType(String seattypeSelect) {
@@ -79,7 +79,7 @@ public class BookTicketPage {
         bookTicketButton.click();
     }
 
-    public void checkInfoFromTimetable(String departStation, String arriverAt) {
+    public String checkInfoFromTimetable(String departStation, String arriverAt) {
         WebElement departsation = driver.findElement(By.xpath("//select[@name='DepartStation']"));
         Select selectDepartStation = new Select(departsation);
         String departStationSelect = selectDepartStation.getFirstSelectedOption().getText();
@@ -88,8 +88,6 @@ public class BookTicketPage {
         Select selectArriveStation = new Select(arrivestation);
         String arriveStationSelect = selectArriveStation.getFirstSelectedOption().getText();
 
-        Assert.assertEquals(departStation, departStationSelect);
-        Assert.assertEquals(arriverAt, arriveStationSelect);
+        return departStationSelect + arriveStationSelect;
     }
-
 }

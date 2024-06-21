@@ -1,11 +1,9 @@
 package pages;
 
-import org.junit.Assert;
+import models.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
@@ -28,6 +26,20 @@ public class LoginPage {
     private By loginButton = By.xpath("//div[@id='content']//input[@value='login']");
     private By messageErrorLoginForm = By.xpath("//div[@id='content']//p[@class='message error LoginForm']");
 
+    public void login(User user) {
+        WebElement loginEmail = driver.findElement(usernameField);
+        WebElement loginPassword = driver.findElement(passwordField);
+        WebElement loginBtn = driver.findElement(loginButton);
+
+        loginEmail.sendKeys(user.getEmail());
+
+        pageBase.scrollView(loginPassword);
+        loginPassword.sendKeys(user.getPassword());
+
+        pageBase.scrollView(loginBtn);
+        loginBtn.click();
+    }
+
     public void login(String email, String password) {
         WebElement loginEmail = driver.findElement(usernameField);
         WebElement loginPassword = driver.findElement(passwordField);
@@ -42,29 +54,28 @@ public class LoginPage {
         loginBtn.click();
     }
 
-    public void checkErrorMessage(String expectedMessage) {
+    public String checkErrorMessage() {
         String recordMessage = driver.findElement(messageErrorLoginForm).getText();
-
-        Assert.assertEquals(expectedMessage, recordMessage);
+        return recordMessage;
     }
 
-    public void checkLoginYet() {
-        int check = 0;
-        boolean loginTabExist = pageBase.checkTabExisted("Home");
+    public boolean checkLoginYet() {
+        boolean check = true;
+        boolean loginTabExist = pageBase.checkTabExisted("Login");
         boolean logoutTabExist = pageBase.checkTabExisted("Log out");
         if (loginTabExist == true && logoutTabExist == false)
-            check += 1;
+            check = false;
 
-        Assert.assertEquals(0, check);
+        return check;
     }
 
-    public void checkExistMessage(String expectedMessage) {
+    public boolean checkExistMessage(String expectedMessage) {
         By textContains = By.xpath(String.format("//*[contains(text(), '%s')]", expectedMessage));
-
         int exitsText = driver.findElements(textContains).size();
 
-        Assert.assertEquals(1, exitsText);
-        if (exitsText == 1)
-            System.out.println("Could not find message");
+        if (exitsText == 0)
+            return false;
+        else
+            return true;
     }
 }

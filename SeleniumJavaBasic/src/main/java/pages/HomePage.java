@@ -1,6 +1,5 @@
 package pages;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,18 +15,15 @@ public class HomePage {
     private String creataAccountText = "create an account";
     private String messageWelcome = "//div[@class='account']//strong";
 
-    public void checkWelcomeMessage (String email) {
+    public String checkWelcomeMessage() {
         By welcomeMessageText = By.xpath(messageWelcome);
 
         String recordMessage = driver.findElement(welcomeMessageText).getText();
-
-        Assert.assertEquals(String.format("Welcome %s", email), recordMessage);
+        return recordMessage;
     }
 
-    public void register() {
+    public WebElement register() {
         WebElement createAccount = driver.findElement(By.xpath(createAccountLink));
-        Assert.assertNotNull(createAccount);
-        Assert.assertEquals(createAccount.getText(), creataAccountText);
-        createAccount.click();
+        return createAccount;
     }
 }
