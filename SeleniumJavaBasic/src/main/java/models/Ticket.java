@@ -1,6 +1,8 @@
 package models;
 
 
+import org.openqa.selenium.WebDriver;
+
 public class Ticket {
     private String departDate;
     private String departStation;
@@ -8,8 +10,13 @@ public class Ticket {
     private String seatType;
     private String ticketAmount;
 
-//    public DepartDateEnum DepartDate = DepartDateEnum.DAY_25;
+    private WebDriver driver;
 
+    public Ticket() {}
+
+    public void Ticket(WebDriver driver) {
+        this.driver = driver;
+    }
 
     public Ticket(String departDate, String departStation, String arriveAt, String seatType, String ticketAmount) {
         this.departDate = departDate;

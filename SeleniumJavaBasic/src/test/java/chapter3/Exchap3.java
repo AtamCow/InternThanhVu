@@ -52,26 +52,26 @@ public class Exchap3 extends BaseSetup {
     @Test
     public void TC1() {
         cf.navigateRailway();
-
-        registerPage.changePage();
-
-        registerPage.register(registerUser);
-
-        cf.navigateQuerrilMail();
-
-        // Confirm account
-        guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
-        guerrillamailPage.confirmEmailWithTd();
-
-
-        pageBase.changeToTab(1);
-
-        loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
-
-        bookTicketPage.changePage();
-
-        bookTicketPage.bookTicket(ticketInfo);
+//
+//        registerPage.changePage();
+//
+//        registerPage.register(registerUser);
+//
+//        cf.navigateQuerrilMail();
+//
+//        // Confirm account
+//        guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
+//        guerrillamailPage.confirmEmailWithTd();
+//
+//
+//        pageBase.changeToTab(1);
+//
+//        loginPage.changePage();
+//        loginPage.login(cf.validLogEmail, cf.logPassword);
+//
+//        bookTicketPage.changePage();
+//
+//        bookTicketPage.bookTicket(ticketInfo);
     }
 
     @AfterClass

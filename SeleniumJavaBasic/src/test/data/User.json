@@ -1,0 +1,28 @@
+{
+  "usersInfo": {
+    "validUser": {
+      "email" : "vcasdfe@grr.la",
+      "password" : "1234qwer"
+    },
+    "invalidUser": {
+      "email" : "vcasdfe@grr.la",
+      "invalidPassword" : "12341234"
+    }
+  },
+  "ticketsInfo": {
+    "ticket": {
+      "departDate": "4",
+      "departStation": "Đà Nẵng",
+      "arriveAt": "Nha Trang",
+      "seatType": "Soft seat",
+      "ticketAmount": "1"
+    },
+    "tickets": {
+      "departDate": "4",
+      "departStation": "Đà Nẵng",
+      "arriveAt": "Nha Trang",
+      "seatType": "Soft seat",
+      "ticketAmount": "2"
+    }
+  }
+}

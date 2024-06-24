@@ -6,9 +6,10 @@
     </listeners>
 
     <test name="Selenium Tests">
+        <parameter name="browser" value="chrome"/>
         <classes>
             <!-- Thay 'com.example.tests.YourTestClass' bằng tên class của bạn -->
-            <class name="chapter10.BookTicketTC" />
+            <class name="chapter10.SimpleGridSelenium" />
         </classes>
     </test>
 </suite>

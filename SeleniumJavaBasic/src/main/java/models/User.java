@@ -2,6 +2,10 @@ package models;
 
 import org.openqa.selenium.WebDriver;
 
+import java.util.List;
+
+
+
 public class User {
     private String email;
     private String password;
@@ -66,3 +70,4 @@ public class User {
         this.pid = pid;
     }
 }
+

@@ -12,7 +12,14 @@ public class BaseSetup {
     private static WebDriver driver;// = new ChromeDriver();
 
     public static void setup() {
-//        driver = new ChromeDriver();
+        String browser = System.getProperty("browser", "chrome");
+        if (browser.equalsIgnoreCase("chrome")) {
+            WebDriverManager.chromedriver().setup();
+            driver = new ChromeDriver();
+        } else if (browser.equalsIgnoreCase("firefox")) {
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+        }
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         //driver.manage().window().maximize();
     }
@@ -30,8 +37,6 @@ public class BaseSetup {
         }
 
         driver.manage().window().maximize();
-
-
     }
 
     public static void navigateToRailWay() {
