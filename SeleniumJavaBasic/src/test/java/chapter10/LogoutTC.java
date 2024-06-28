@@ -8,6 +8,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.*;
 
+import java.io.IOException;
+
 public class LogoutTC extends BaseSetup {
     private ConfigTest cf;
 
@@ -18,7 +20,7 @@ public class LogoutTC extends BaseSetup {
     private User validUser;
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setup();
         cf = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());

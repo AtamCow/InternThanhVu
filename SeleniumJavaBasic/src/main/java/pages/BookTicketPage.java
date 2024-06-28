@@ -31,7 +31,6 @@ public class BookTicketPage {
         selectDepartDate(ticket.getDepartDate());
         selectDepartStation(ticket.getDepartStation());
 
-        BookTicketPage untils = new BookTicketPage(driver);
 
         selectArriveStation(ticket.getArriveAt());
         selectSeatType(ticket.getSeatType());
@@ -54,9 +53,10 @@ public class BookTicketPage {
     public void selectArriveStation(String arriveStation) {
         By ticketArriveStationSelect = By.xpath(String.format(arriverAtSelect, arriveStation));
         WebElement arriveAt = driver.findElement(ticketArriveStationSelect);
-
-        BookTicketPage untils = new BookTicketPage(driver);
-        untils.pageBase.wait(arriveAt).click();
+        arriveAt.click();
+//        pageBase.waitMiliSec(200);
+//        BookTicketPage untils = new BookTicketPage(driver);
+//        untils.pageBase.wait(arriveAt).click();
     }
 
     public void selectSeatType(String seattypeSelect) {
@@ -89,5 +89,26 @@ public class BookTicketPage {
         String arriveStationSelect = selectArriveStation.getFirstSelectedOption().getText();
 
         return departStationSelect + arriveStationSelect;
+    }
+
+    public void bookTickets(int numOfTickets, Ticket ticket) {
+        for (int i = 0; i < numOfTickets; i++) {
+            changePage();
+
+            int number = Integer.parseInt(ticket.getDepartDate());
+            number += i;
+            String result = Integer.toString(number);
+
+            selectDepartDate(result);
+            selectDepartStation(ticket.getDepartStation());
+
+            pageBase.waitMiliSec(2000);
+
+            selectArriveStation(ticket.getArriveAt());
+            selectSeatType(ticket.getSeatType());
+            selectAmount(ticket.getTicketAmount());
+
+            clickBookticketButton();
+        }
     }
 }

@@ -10,6 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.*;
 
+import java.io.IOException;
+
 public class ResetPasswordTC extends BaseSetup {
     private ConfigTest cf;
 
@@ -20,7 +22,7 @@ public class ResetPasswordTC extends BaseSetup {
     private ForgotPasswordPage forgotPasswordPage;
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setup();
         cf  = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());

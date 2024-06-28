@@ -4,6 +4,7 @@ import base.BaseSetup;
 import config.ConfigTest;
 import enums.Location;
 import enums.SeatType;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import models.Ticket;
 import models.User;
 import org.testng.annotations.AfterClass;
@@ -13,10 +14,17 @@ import org.testng.annotations.Test;
 import pages.*;
 import utils.listeners.ReportListener;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 @Listeners(ReportListener.class)
 
 public class Exchap3 extends BaseSetup {
     private ConfigTest cf;
+
+    private Properties properties = new Properties();
+
     private LoginPage loginPage;
     private BookTicketPage bookTicketPage;
     private PageBase pageBase;
@@ -34,7 +42,7 @@ public class Exchap3 extends BaseSetup {
     String ticketAmount = "1";
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setup();
         cf = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());
@@ -51,27 +59,28 @@ public class Exchap3 extends BaseSetup {
 
     @Test
     public void TC1() {
-        cf.navigateRailway();
-
-        registerPage.changePage();
-
-        registerPage.register(registerUser);
-
-        cf.navigateQuerrilMail();
-
-        // Confirm account
-        guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
-        guerrillamailPage.confirmEmailWithTd();
-
-
-        pageBase.changeToTab(1);
-
-        loginPage.changePage();
-        loginPage.login(cf.validLogEmail, cf.logPassword);
-
-        bookTicketPage.changePage();
-
-        bookTicketPage.bookTicket(ticketInfo);
+//        cf.navigateRailway();
+        navigateToRailWay();
+//
+//        registerPage.changePage();
+//
+//        registerPage.register(registerUser);
+//
+//        cf.navigateQuerrilMail();
+//
+//        // Confirm account
+//        guerrillamailPage.confirmAccount(cf.idEmail, cf.hostEmail);
+//        guerrillamailPage.confirmEmailWithTd();
+//
+//
+//        pageBase.changeToTab(1);
+//
+//        loginPage.changePage();
+//        loginPage.login(cf.validLogEmail, cf.logPassword);
+//
+//        bookTicketPage.changePage();
+//
+//        bookTicketPage.bookTicket(ticketInfo);
     }
 
     @AfterClass

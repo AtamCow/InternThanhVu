@@ -12,6 +12,8 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.*;
 
+import java.io.IOException;
+
 public class Chapter10 extends BaseSetup {
     private ConfigTest cf;
 
@@ -50,7 +52,7 @@ public class Chapter10 extends BaseSetup {
     String ticketAmounts = "2";
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setup();
         cf  = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());

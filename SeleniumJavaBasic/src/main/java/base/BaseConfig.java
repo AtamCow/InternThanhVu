@@ -1,5 +1,7 @@
 package base;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -25,6 +27,7 @@ public class BaseConfig {
     }
 
     public static String getProperty(String key) {
+
         return properties.getProperty(key);
     }
 }

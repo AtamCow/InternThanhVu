@@ -84,6 +84,15 @@ public class PageBase {
         return check;
     }
 
+    public String multiplyTwoStringNumber (String num1, String num2) {
+        int intNum1 = Integer.parseInt(num1);
+        int intNum2 = Integer.parseInt(num2);
+        int result = intNum1 * intNum2;
+
+        return String.valueOf(result);
+
+    }
+
     public void logOut() {
         By tabNameChange = By.xpath("//div[@id='menu']//span[text()='Log out']");
         driver.findElement(tabNameChange).click();
