@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 import pages.*;
 
+import java.io.IOException;
+
 public class CreateAccountTC extends BaseSetup {
     private ConfigTest cf;
 
@@ -23,7 +25,7 @@ public class CreateAccountTC extends BaseSetup {
     private User registerBlankPassPidUser;
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setup();
         cf  = new ConfigTest(getDriver());
         homePage = new HomePage(getDriver());

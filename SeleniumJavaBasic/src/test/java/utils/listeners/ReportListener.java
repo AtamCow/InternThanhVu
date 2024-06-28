@@ -14,6 +14,8 @@ import io.qameta.allure.Attachment;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
+import java.io.IOException;
+
 import static utils.extentreports.ExtentManager.getExtentReports;
 
 public class ReportListener implements ITestListener {
@@ -49,15 +51,19 @@ public class ReportListener implements ITestListener {
 
     @Override
     public void onStart(ITestContext iTestContext) {
-        driver = BaseSetup.getDriver();
+        try {
+            driver = BaseSetup.getDriver();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Log.info("Start testing " + iTestContext.getName());
-        iTestContext.setAttribute("WebDriver", driver);
+//        iTestContext.setAttribute("WebDriver", driver);
     }
 
     @Override
     public void onFinish(ITestContext iTestContext) {
         Log.info("End testing " + iTestContext.getName());
-        //Kết thúc và thực thi Extents Report
+
         getExtentReports().flush();
     }
 
@@ -76,11 +82,19 @@ public class ReportListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-        driver = BaseSetup.getDriver();
+        try {
+            driver = BaseSetup.getDriver();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         Log.error(getTestName(iTestResult) + " test is failed.");
 
-        ExtentTestManager.addScreenShot(Status.FAIL, getTestName(iTestResult));
+        try {
+            ExtentTestManager.addScreenShot(Status.FAIL, getTestName(iTestResult));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         ExtentTestManager.logMessage(Status.FAIL, iTestResult.getThrowable().toString());
         ExtentTestManager.logMessage(Status.FAIL, iTestResult.getName() + " is failed.");

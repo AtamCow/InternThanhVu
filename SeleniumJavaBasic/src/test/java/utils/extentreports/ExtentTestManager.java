@@ -10,6 +10,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,18 +30,18 @@ public class ExtentTestManager {
         return test;
     }
 
-    public WebDriver getDriver() {
+    public WebDriver getDriver() throws IOException {
         WebDriver driver = baseSetup.getDriver();
         return driver;
     }
 
-    public void addScreenShot(String message) {
+    public void addScreenShot(String message) throws IOException {
         String base64Image = "data:image/png;base64,"
                 + ((TakesScreenshot) baseSetup.getDriver()).getScreenshotAs(OutputType.BASE64);
         getTest().log(Status.INFO, message,        MediaEntityBuilder.createScreenCaptureFromBase64String(base64Image).build());
     }
 
-    public static void addScreenShot(Status status, String message) {
+    public static void addScreenShot(Status status, String message) throws IOException {
 
         String base64Image = "data:image/png;base64,"
                 + ((TakesScreenshot) baseSetup.getDriver()).getScreenshotAs(OutputType.BASE64);

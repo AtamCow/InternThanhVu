@@ -3,16 +3,21 @@ package pages;
 import models.Ticket;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class BookTicketSuccessfulPage {
     private WebDriver driver;
+    private TicketPricePage ticketPricePage;
+    private PageBase pageBase;
 
     public BookTicketSuccessfulPage(WebDriver driver) {
         this.driver = driver;
-
+        this.ticketPricePage = new TicketPricePage(driver);
+        this.pageBase = new PageBase(driver);
     }
     private String h1MessageXpath = "//div[@id='content']//h1";
     private String tdInformation = "//div[@id='content']//tbody//tr[2]//td[%s]";
@@ -22,6 +27,7 @@ public class BookTicketSuccessfulPage {
     private String tdseatType = "3";
     private String tdDepartDate = "4";
     private String tdAmount = "7";
+    private String tdTotalPrice = "8";
 
 
 
@@ -69,5 +75,16 @@ public class BookTicketSuccessfulPage {
     public String checkBookedSuccessfulMessage() {
         By h1Message = By.xpath(h1MessageXpath);
         return driver.findElement(h1Message).getText();
+    }
+
+    public boolean checkTicketPrice(String priceTotal, String ticketAmount) {
+        String priceCheck = pageBase.multiplyTwoStringNumber(priceTotal, ticketAmount);
+
+        By price = By.xpath(String.format(tdInformation,tdTotalPrice));
+        String totalPrice = driver.findElement(price).getText();
+
+        System.out.println(totalPrice);
+        System.out.println(priceCheck);
+        return totalPrice.equals(priceCheck);
     }
 }

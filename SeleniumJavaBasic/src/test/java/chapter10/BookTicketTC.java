@@ -51,10 +51,7 @@ public class BookTicketTC extends BaseSetup {
         bookTicketPage = new BookTicketPage(getDriver());
         bookTicketSuccessfulPage = new BookTicketSuccessfulPage(getDriver());
 
-//        validUser = new User(cf.validLogEmail, cf.logPassword);
-//
-//        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
-//        ticketsInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmounts);
+
     }
 
     @DataProvider(name = "User and Ticket information")
@@ -76,10 +73,6 @@ public class BookTicketTC extends BaseSetup {
         tickets = new Ticket(ticketsInfo.getDepartDate(), ticketsInfo.getDepartStation(),
                 ticketsInfo.getArriveAt(), ticketsInfo.getSeatType(),
                 ticketsInfo.getTicketAmount());
-//
-//        validUser = new User(cf.validLogEmail, cf.logPassword);
-//        ticketInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmount);
-//        ticketsInfo = new Ticket(departDate, departStation, arriveStation, seatType, ticketAmounts);
 
         return new Object[][]{
                 {validUser, ticket},

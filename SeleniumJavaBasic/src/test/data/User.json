@@ -10,12 +10,19 @@
     }
   },
   "ticketsInfo": {
-    "ticket": {
-      "departDate": "4",
+    "ticket1": {
+      "departDate": "5",
       "departStation": "Đà Nẵng",
-      "arriveAt": "Nha Trang",
-      "seatType": "Soft seat",
+      "arriveAt": "Sài Gòn",
+      "seatType": "Soft seat with air conditioner",
       "ticketAmount": "1"
+    },
+    "ticket2": {
+      "departDate": "5",
+      "departStation":"Huế",
+      "arriveAt": "Quảng Ngãi",
+      "seatType": "Hard seat",
+      "ticketAmount": "2"
     },
     "tickets": {
       "departDate": "4",

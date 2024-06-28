@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import pages.*;
 import base.*;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -26,7 +27,7 @@ public class SimpleGridSelenium extends BaseSetup {
 
 
     @BeforeClass
-    public void setUp() throws MalformedURLException {
+    public void setUp() throws IOException {
         super.setup();
         cf = new ConfigTest(getDriver());
 

@@ -12,6 +12,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.*;
 
+import java.io.IOException;
+
 public class CancelTicketTC extends BaseSetup {
     private ConfigTest cf;
 
@@ -29,7 +31,7 @@ public class CancelTicketTC extends BaseSetup {
     String ticketAmount = "1";
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setup();
         cf  = new ConfigTest(getDriver());
         loginPage = new LoginPage(getDriver());
