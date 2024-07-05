@@ -1,15 +1,24 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="Selenium Test Suite">
+<suite name="Selenium Test Suite" parallel="classes" thread-count="3">
 
     <listeners>
         <listener class-name="utils.listeners.ReportListener"></listener>
     </listeners>
 
     <test name="Selenium Tests">
+        <parameter name="jsonFilePath" value="D:\Intern\AGEST\Selenium\untitled\src\test\resources\data\NodeConfig.json"/>
         <parameter name="browser" value="chrome"/>
         <classes>
             <!-- Thay 'com.example.tests.YourTestClass' bằng tên class của bạn -->
-            <class name="finalTestCases.FinalTestCase" />
+            <class name="test.Test1" />
         </classes>
     </test>
+
+<!--    <test name="Selenium Tests firefox">-->
+<!--        <parameter name="jsonFilePath" value="D:\Internx`\AGEST\Selenium\untitled\src\test\resources\data\NodeConfig.json"/>-->
+<!--        <parameter name="browser" value="chrome"/>-->
+<!--        <classes>-->
+<!--            <class name="finalTestCases.FinalTestCase"></class>-->
+<!--        </classes>-->
+<!--    </test>-->
 </suite>

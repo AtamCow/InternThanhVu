@@ -46,7 +46,7 @@ public class FinalTestCase extends BaseSetup {
         validUser = new User(cf.validLogEmail, cf.logPassword);
 
         ObjectMapper mapper = new ObjectMapper();
-        MainData mainData = mapper.readValue(new File("src/test/data/User.json"), MainData.class);
+        MainData mainData = mapper.readValue(new File("src/test/resources/data/User.json"), MainData.class);
 
         Ticket ticketInfo1 = mainData.getTicketsInfo().get("ticket1");
         Ticket ticketInfo2 = mainData.getTicketsInfo().get("ticket2");

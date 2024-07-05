@@ -15,7 +15,7 @@ public class ConfigTest {
     public String hostEmail = "grr.la";
     public String validLogEmail = idEmail + "@" + hostEmail;
 
-    public String reIdEmail = "vssdssxcs";
+    public String reIdEmail = "vfwvsdvs";
     public String reHostEmail = "grr.la";
     public String reEmail = reIdEmail + "@" + reHostEmail;
 

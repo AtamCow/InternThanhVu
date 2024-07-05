@@ -1,0 +1,35 @@
+{
+  "usersInfo": {
+    "validUser": {
+      "email" : "vcasdfe@grr.la",
+      "password" : "1234qwer"
+    },
+    "invalidUser": {
+      "email" : "vcasdfe@grr.la",
+      "invalidPassword" : "12341234"
+    }
+  },
+  "ticketsInfo": {
+    "ticket1": {
+      "departDate": "5",
+      "departStation": "Đà Nẵng",
+      "arriveAt": "Sài Gòn",
+      "seatType": "Soft seat with air conditioner",
+      "ticketAmount": "1"
+    },
+    "ticket2": {
+      "departDate": "5",
+      "departStation":"Huế",
+      "arriveAt": "Quảng Ngãi",
+      "seatType": "Hard seat",
+      "ticketAmount": "2"
+    },
+    "tickets": {
+      "departDate": "4",
+      "departStation": "Đà Nẵng",
+      "arriveAt": "Nha Trang",
+      "seatType": "Soft seat",
+      "ticketAmount": "2"
+    }
+  }
+}
