@@ -1,0 +1,19 @@
+{
+  "capabilities": [
+    {
+      "browserName": "chrome",
+      "maxInstances": 5
+    },
+    {
+      "browserName": "firefox",
+      "maxInstances": 5
+    },
+    {
+      "browserName": "edge",
+      "maxInstances": 5
+    }
+  ],
+  "register": true,
+  "hub": "http://localhost:4444",
+  "port": 5555
+}
