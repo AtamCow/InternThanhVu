@@ -1,0 +1,352 @@
+Title,Precondition,Expected Results,Section,Steps
+UI of Home page displays as design ,,"- UI of Home page displays as design
+- Title Welcome
+- Menu in the top",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page "
+"User can navigate to 'FAQ"" tab when not logged yet",,"Open ""FAQ"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""FAQ"" tab 
+4. Observe the ""FAQ"" tab"
+"User can navigate to ""Contact"" tab when not logged yet",,"Opent ""Contect"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""Contact"" tab 
+4. Observe the ""Contact"" tab"
+"User can navigate to ""Timetable"" tab when not logged yet",,"Open ""Timetable"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""Timetable"" tab 
+4. Observe the ""Timetable"" tab"
+"User can navigate to ""Ticket price"" tab when not logged yet",,"Open ""Ticker price"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""Ticket price"" tab 
+4. Observe the ""Ticket price"" tab"
+"User can navigate to ""Register"" tab when not logged yet",,"Opent ""Register"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""Register"" tab 
+4. Observe the ""Register"" tab"
+"User can navigate to ""Login"" tab when not logged yet",,"Open ""Login"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""Login"" tab 
+4. Observe the ""Login"" tab"
+"Navigate to ""Log in"" tab when navigate to ""Book ticket"" tab without logged in",,"Open ""login"" tab",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Navigate to ""Book ticket"" tab 
+4. Observe the current tab"
+"User can navigate to ""My ticket"" tab when logged in",,"Open ""My ticket"" tab",Home,"1. Navigate to Railway 
+2. Login an account
+3. Navigate to ""My ticket"" tab 
+4. Observe the current tab"
+"User can navigate to ""Change password"" tab when logged in",,"Open ""Change password"" tab",Home,"1. Navigate to Railway 
+2. Login an account
+3. Navigate to ""Change password"" tab 
+4. Observe the current tab"
+"User can click to ""create an account"" link to create an account",,"Open ""Register"" tab ",Home,"1. Navigate to Railway 
+2. Observe the UI of Home page 
+3. Click link ""create an account"" "
+"UI of ""Register"" tab displays as design ",,"- UI of ""Register"" tab displays as design 
+- Title Create account
+- Menu in the top
+- Links and form in as same as design",Register,"1. Navigate to Railway 
+2. Observe the UI of ""Register"" tab "
+User can register an account with valid info ,,A message is displayed to inform users that they register successfully ,Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter valid info to the fields:
+- Email: 6 - 32. characters
+- Password: 8 - 64 characters
+- Confirm password: the same as password
+- PID/Passport numbers (8 - 20 characters)
+4. Click Register button"
+System displays error when register with email < 6 characters,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: email length < 6 characters
+- Password: 8 - 64 characters
+- Confirm password: the same as password
+- PID/Passport numbers (8 - 20 characters)
+4. Click Register button"
+System displays error when register with email > 32 characters,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: email length > 3.2. characters
+- Password: 8 - 64. characters
+- Confirm password: the same as password
+- PID/Passport numbers (8 - 2.0 characters)
+4. Click Register button"
+System displays error when register with wrong confirm password,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: wrong format
+- Password: 8 - 64 characters
+- Confirm password: the same as password
+- PID/Passport numbers (8 - 20 characters)
+4. Click Register button"
+System displays error when register with password < 6 characters,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: 6 - 32 characters
+- Password: < 8 characters
+- Confirm password: the same as password
+- PID/Passport numbers (8 - 20 characters)
+4. Click Register button"
+System displays error when register with password > 64 characters,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: 6 - 32 characters
+- Password: > 64 characters
+- Confirm password: the same as password
+- PID/Passport numbers (8 - 20 characters)
+4. Click Register button"
+User cannot register an account with invalid confirm password ,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: 6 - 32 characters
+- Password: 8 - 64 characters
+- Confirm password: not the same as password
+- PID/Passport numbers (8 - 20 characters)
+4. Click Register button"
+System displays error when register with PID/Passport < 8 characters,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: 6 - 32 characters
+- Password: 8 - 64 characters
+- Confirm password: the same as password
+- PID/Passport numbers < 8 characters 
+4. Click Register button"
+System displays error when register with PID/Passport > 20 characters,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Enter info to the fields:
+- Email: 6 - 32 characters
+- Password: 8 - 64 characters
+- Confirm password: the same as password
+- PID/Passport numbers: >20 characters
+4. Click Register button"
+"User can navigate to ""login"" tab",,"Open ""Login"" tab ",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Click ""login"" link "
+"User can navigate to ""Register"" tab",,"Open ""Confirmation"" tab ",Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Click ""here"" link "
+User can enter the confirmation code ,,Message confirm successfully,Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Click ""here"" link 
+4. Enter ""Confirmation code"" to the field 
+5. Click ""Confirm"" button "
+System displays error when enter wrong confirmation code,,Message could not confirm info,Register,"1. Navigate to Railway
+2. Go to Register tab
+3. Click ""here"" link 
+4. Enter wrong ""Confirmation code"" to the field 
+5. Click ""Confirm"" button "
+"UI of ""Log in"" tab displays as design ",,"- UI of ""Log in"" tab displays as design 
+- Title Login page
+- Menu in the top
+- Links and form in as same as design",Login,"1. Navigate to Railway 
+2. Go to ""Log in"" tab 
+3. Observe the UI of ""Log in"" tab "
+User can login successfully with valid account ,,A message is displayed to inform users that they login successfully and user name is diplayed at the lower right corner of the banner ,Login,"1. Navigate to Railway
+2. Go to Login tab
+3. Enter valid info to the fields:
+- Email
+- Password
+4. Click Login button"
+User can create a account,,"Open ""registration page"" tab ",Login,"1. Navigate to Railway
+2. Go to Login tab
+3. Click ""registration page"" link "
+User can recover password ,,"Open ""Forgot Password page"" tab ",Login,"1. Navigate to Railway
+2. Go to Login tab
+3. Click ""Forgot Password page"" link "
+User cannot login successfully with invalid account,,System display error can not log in successfully,Login,"1. Navigate to Railway
+2. Go to Login tab
+3. Enter valid info to the fields:
+- Email invalid
+- Password invalid
+4. Click Login button"
+"UI of ""Book ticket"" tab displays as design ",,"- UI of ""Book ticket"" tab displays as design 
+- Title Book ticket
+- Menu in the top
+- Form in as same as design",Book ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to ""Book ticket"" tab 
+4. Observe the UI of ""Book ticket"" tab "
+User cannot bookticket when not logged in yet ,,"Open ""Login"" page ",Book ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to Book ticket tab "
+User can book ticket successfully,,User book ticket successfully,Book ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to Book ticket tab 
+4. Choose 1 ""Depart date"" in the ComboBox 
+5. Choose 1 ""Depart from"" in the ComboBox 
+6 Choose 1 ""Arrive at"" in the ComboBox 
+7. Choose 1 ""Seat type"" in the ComboBox 
+8 Choose 1 ""Ticket amount"" in the ComboBox 
+9 Click the button ""Book ticket"" 
+10. Navigate to ""Ticket booked successfully"" tab 
+11. Display Ticket information"
+"System displays error when ""Depart from"" == ""Arrive at"" ",,System displays error and request User book tichket again,Book ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to Book ticket tab 
+4. Choose 1 ""Depart from"" in the ComboBox
+5. Choose 1 ""Arrive at"" in the ComboBox as same as ""Depart from"" 
+6 Click ""Book ticket"" button "
+System displays error when ticket booked > 10,,"- On the top of the form, display error message
+- Nearby the email field, display error message",Book ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to Book ticket tab 
+4. Choose number of ""ticket amount"" > 10 - Tickets booked
+5. Click ""Book ticket"" button "
+"UI of ""My ticket"" tab displays as design ",,"- UI of ""My ticket"" tab displays as design 
+- Title Manage ticket
+- Menu in the top
+- Table and form in as same as design",My ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to ""My ticket"" tab 
+4. Observe the UI of ""My ticket"" tab "
+User can cancel tickets booked,,Remove the ticket out of the sheet,My ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to My ticket tab 
+4. Click ""Cancel"" button 
+5. Click confirm to cancel the ticket"
+User can use filters when the table has more then 6 rows,,"- At step #2.: Display filter sheet when the table has more than 6 rows 
+- At step #6: Display booked ticket by filters",My ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to My ticket tab 
+4. Choose ""Depart Station"" in the filters
+5. Choose ""Arrive Station"" in the filter 
+6 Enter ""Depart Date"" in the filter
+7. Click ""Submit"" button"
+"User can find how much ticket they can book in ""Note""",,"Display ""currently book tickets"" and ticket can book more",My ticket,"1. Navigate to Railway 
+2. Log in
+3. Go to My ticket tab 
+4. Observe the ""Note"""
+"UI of ""Change password"" tab displays as design ",,"- UI of ""Change password tab displays as design 
+- Title Change password
+- Menu in the top
+- Form in as same as design",Change password,"1. Navigate to Railway 
+2. Log in
+3. Go to ""Change password"" tab 
+4. Observe the UI of ""Change password"" tab "
+User can change password with valid password ,,"A message will be notified ""Your password has been updated""",Change password,"1. Navigate to Railway 
+2. Log in
+3. Go to Change password tab 
+4. Enter valid info to the fields:
+- Current Password 
+- New Password 
+- Confirm Passord 
+5. Click ""Change Password"" button "
+System displays error when enter invalid current password ,,"A message will be notified ""Invalid current password""",Change password,"1. Navigate to Railway 
+2. Log in
+3. Go to Change password tab 
+4. Enter info to the fields:
+- Current Password not as same as User's password 
+- New Password 
+- Confirm Passord 
+5. Click ""Change Password"" button "
+System displays error when enter new password < 8 characters ,,"A message will be notified ""Invalid new password""",Change password,"1. Navigate to Railway 
+2. Log in
+3. Go to Change password tab 
+4. Enter info to the fields:
+- Current Password 
+- New Password < 8 characters
+- Confirm Passord 
+5. Click ""Change Password"" button "
+System displays error when enter new password > 64 characters ,,"A message will be notified ""Invalid new password""",Change password,"1. Navigate to Railway 
+2. Log in
+3. Go to Change password tab 
+4. Enter info to the fields:
+- Current Password 
+- New Password < 8 characters
+- Confirm Passord 
+5. Click ""Change Password"" button "
+System displays error when enter invalid confirm password ,,"A message will be notified ""The password confirmation does not match the new password""",Change password,"1. Navigate to Railway 
+2. Log in
+3. Go to Change password tab 
+4. Enter info to the fields:
+- Current Password 
+- New Password 
+- Confirm Passord != New password 
+5. Click ""Change Password"" button "
+User can logout ,,Navigate to Home page without logged in,Logout,"1. Navigate to Railway 
+2. Log in
+3. Click ""Logout"" tab "
+"UI of ""Time table"" tab displays as design ",,"- UI of ""Timetable"" tab displays as design 
+- Title Train timetable
+- Menu in the top
+- Links and table in as same as design",Time table,"1. Navigate to Railway 
+2. Go to ""Time table"" tab
+3. Observe the UI of ""Time table"" tab "
+"User can see ""Train Timetable"" when not logged in",,Display train information,Time table,"1. Navigate to Railway 
+2. Go to ""Time table"" tab
+3. Observe the ""Train Timetable"" "
+User can check price when not logged in yet ,,"When clicking the link, open page ""Ticket Price"" ",Time table,"1. Navigate to Railway 
+2. Go to ""Time table"" tab 
+3. Click link ""check price"" "
+"Navigate to ""Log in"" tab when user book ticket without logged in",,"Open ""Log in"" tab",Time table,"1. Navigate to Railway 
+2. Go to ""Time table"" tab 
+3. Click link ""book ticket"" "
+"UI of ""Forgot password"" tab displays as design ",,"- UI of ""Timetable"" tab displays as design 
+- Title Train timetable
+- Menu in the top
+- Links and table in as same as design",Forgot password,"1. Navigate to Railway 
+2. Go to ""Forgot password"" tab 
+3. Observe the UI of ""Forgot password"" tab "
+User can reset password with valid email ,,System send password reset instructions to the email address associated with their account ,Forgot password,"1. Navigate to Railway 
+2. Go to Forgot password tab 
+3. Enter valid info to the field 
+4. Click ""Send Instructions"""
+User cannot reset password with invalid email ,,"
+- Nearby the email field, message ""Please enter a valid email"" ",Forgot password,"1. Navigate to Railway 
+2. Go to Forgot password tab 
+3. Enter valid info to the field 
+4. Click ""Send Instructions"""
+"UI of ""FAQ"" tab displays as design ",,"- UI of ""FAQ"" tab displays as design 
+- Title Frequently Asked Questions
+- Menu in the top
+- Links and content as same as design",FAQ,"1. Navigate to Railway 
+2. Go to ""FAQ"" tab 
+3. Observe the UI of ""FAQ"" page "
+The answers provided for frequently asked questions are accurate and up-to-date ,,Content meets requirements ,FAQ,"1. Navigate to Railway 
+2. Go to FAQ tab 
+3. Observe the UI of FAQ page 
+4. Check content of Questions and Answers "
+User navigate to the answer when click the questions link ,,The link lead to the correct Answers ,FAQ,"1. Navigate to Railway 
+2. Go to FAQ tab 
+3. Click link in this page:
+- Question links "
+"User can click ""create an accout"" link ",,"Open ""Register"" tab",FAQ,"1. Navigate to Railway 
+2. Go to FAQ tab 
+3. Click link in this page:
+- ""create an account"" link "
+"User can click ""Book Ticket page"" link ",,"Open ""Book ticket"" tab",FAQ,"1. Navigate to Railway 
+2. Go to FAQ tab 
+3. Click link in this page:
+- ""Book Ticket page"" link "
+"UI of ""Contact"" tab displays as design ",,"- UI of ""Contact"" tab displays as design 
+- Title Contact Information
+- Menu in the top
+- Links as same as design",Contact,"1. Navigate to Railway 
+2. Go to ""Contact"" tab 
+3. Observe the UI of ""Contact"" tab "
+Email linked to the correct address ,,Navigate to admin email,Contact,"1. Navigate to Railway 
+2. Go to Contact tab 
+3. Click link Email "
+UI of Train ticket price list displays as design ,,"- UI of ""Ticket price"" tab displays as design 
+- Title TRain ticket price list
+- Menu in the top
+- Buttons as same as design",Ticket price,"1. Navigate to Railway 
+2. Go to Ticket price tab 
+2. Observe the UI of Ticket price page "
+UI of Ticket Price list displays as design ,,UI of Ticket Price list displays as design ,Ticket price,"1. Navigate to Railway 
+2. Go to Ticket price tab 
+3. Click ""Check Price"" Button "
+User can check book information when not logged in yet ,,"When clicking the link, open page ""check price"" ",Ticket price,"1. Navigate to Railway 
+2. Go to Ticket price tab 
+3. Click link ""Check Price"" "
+"Navigate to ""Log in"" tab when click ""Book ticket"" without logged in yet",,"If User not logged in yet, open ""Login page"" ",Ticket price,"1. Navigate to Railway 
+2. Go to Ticket price tab 
+3. Click link ""book ticket"" "
